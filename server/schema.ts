@@ -45,13 +45,13 @@ export const accounts = pgTable(
 );
 
 export const emailVerificationTokens = pgTable("emailVerificationToken", {
-  token: text("token").notNull(),
+  token: text("token").primaryKey().notNull(),
   expires: timestamp("expires").notNull(),
   email: text("email").notNull(),
 });
 
 export const passwordResetTokens = pgTable("passwordResetToken", {
-  token: text("token").notNull(),
+  token: text("token").primaryKey().notNull(),
   expires: timestamp("expires").notNull(),
   email: text("email").notNull(),
 });
