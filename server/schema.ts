@@ -49,3 +49,9 @@ export const emailVerificationTokens = pgTable("emailVerificationToken", {
   expires: timestamp("expires").notNull(),
   email: text("email").notNull(),
 });
+
+export const passwordResetTokens = pgTable("passwordResetToken", {
+  token: text("token").notNull(),
+  expires: timestamp("expires").notNull(),
+  email: text("email").notNull(),
+});

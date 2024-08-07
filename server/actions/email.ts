@@ -22,3 +22,18 @@ export const sendEmailVerificationToken = async (
     error,
   };
 };
+
+export const sendPasswordResetToken = async (email: string, token: string) => {
+  const { data, error } = await resend.emails.send({
+    from: "Nextgram <onboarding@resend.dev>",
+    to: [email],
+    subject: "Nextgram - Password Reset",
+    html: `<h1>Reset your password</h1>
+      <p>Click <a href="${getBaseUrl()}/reset-password-verification?token=${token}">here</a> to reset your password.</p>`,
+  });
+
+  return {
+    success: data,
+    error,
+  };
+};

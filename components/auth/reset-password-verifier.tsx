@@ -1,27 +1,23 @@
 "use client";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { verifyEmail } from "@/server/actions/tokens";
+import { verifyPasswordToken } from "@/server/actions/tokens";
 import { Check, Loader, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const VerifyPage = ({
-  searchParams: { token },
-}: {
-  searchParams: { token: string };
-}) => {
+const ResetPasswordVerifier = ({ token }: { token: string }) => {
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
 
   const handleVerify = async () => {
-    const { success, error } = await verifyEmail(token);
+    const { success, error } = await verifyPasswordToken(token);
 
     if (success) {
       setSuccess(success);
 
-      router.replace("/login");
+      router.replace(`/new-password?token=${token}`);
     } else if (error) {
       setError(error);
     }
@@ -38,7 +34,7 @@ const VerifyPage = ({
           <Check className="h-4 w-4" />
           <AlertTitle>Successfully verified!</AlertTitle>
           <AlertDescription>
-            Redirecting you to the login page...
+            Redirecting you to the reset page...
           </AlertDescription>
         </>
       ) : error ? (
@@ -52,7 +48,7 @@ const VerifyPage = ({
           <Loader className="h-4 w-4 animate-spin" />
           <AlertTitle>Verifying email...</AlertTitle>
           <AlertDescription>
-            Please wait while we verify your email address
+            Please wait while we verify your email address for password reset
           </AlertDescription>
         </>
       )}
@@ -60,4 +56,4 @@ const VerifyPage = ({
   );
 };
 
-export default VerifyPage;
+export default ResetPasswordVerifier;

@@ -14,6 +14,7 @@ import { User as UserType } from "next-auth";
 import { signOut } from "next-auth/react";
 import { toast } from "sonner";
 import ThemeToggler from "./theme-toggler";
+import Link from "next/link";
 
 const UserButton = ({ user }: { user: UserType }) => {
   const handleLogOut = () => {
@@ -59,10 +60,12 @@ const UserButton = ({ user }: { user: UserType }) => {
           <User className="w-4 h-4" />
           <span>Profile</span>
         </DropdownMenuItem>
-        <DropdownMenuItem className="flex gap-2 cursor-pointer">
-          <Settings className="w-4 h-4" />
-          <span>Settings</span>
-        </DropdownMenuItem>
+        <Link href="/dashboard/settings">
+          <DropdownMenuItem className="flex gap-2 cursor-pointer">
+            <Settings className="w-4 h-4" />
+            <span>Settings</span>
+          </DropdownMenuItem>
+        </Link>
         <DropdownMenuItem className="cursor-pointer">
           <ThemeToggler />
         </DropdownMenuItem>
