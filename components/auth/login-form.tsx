@@ -43,6 +43,11 @@ const LoginForm = () => {
         router.push("/feed");
       }
 
+      if (data?.emailSuccess) {
+        toast.dismiss();
+        toast.success(data.emailSuccess);
+      }
+
       if (data?.error) {
         toast.dismiss();
         toast.error(data.error);

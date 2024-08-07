@@ -16,20 +16,22 @@ import { toast } from "sonner";
 import ThemeToggler from "./theme-toggler";
 
 const UserButton = ({ user }: { user: UserType }) => {
-  const handleLogOut = async () => {
+  const handleLogOut = () => {
     toast.loading("Logging out...");
 
-    await signOut();
+    setTimeout(async () => {
+      await signOut();
 
-    toast.dismiss();
-    toast.success("You have been logged out");
+      toast.dismiss();
+      toast.success("You have been logged out");
+    }, 1000);
   };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         {user.image ? (
-          <Avatar>
+          <Avatar className="h-8 w-8">
             <AvatarImage src={user.image} />
           </Avatar>
         ) : (
@@ -43,7 +45,7 @@ const UserButton = ({ user }: { user: UserType }) => {
       <DropdownMenuContent className="p-4 min-w-[250px]">
         <div className="group flex flex-col gap-2 items-center justify-center rounded-md w-full py-6 bg-muted">
           {user.image ? (
-            <Avatar>
+            <Avatar className="h-8 w-8">
               <AvatarImage src={user.image} />
             </Avatar>
           ) : (

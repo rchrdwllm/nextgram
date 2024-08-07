@@ -43,3 +43,9 @@ export const accounts = pgTable(
     }),
   })
 );
+
+export const emailVerificationTokens = pgTable("emailVerificationToken", {
+  token: text("token").notNull(),
+  expires: timestamp("expires").notNull(),
+  email: text("email").notNull(),
+});

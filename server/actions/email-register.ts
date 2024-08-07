@@ -6,6 +6,8 @@ import { db } from "..";
 import { eq } from "drizzle-orm";
 import { users } from "../schema";
 import bcrypt from "bcrypt";
+import { sendEmailVerificationToken } from "./email";
+import { generateEmailVerificationToken } from "./tokens";
 
 export const emailRegister = actionClient
   .schema(registerSchema)
@@ -17,6 +19,17 @@ export const emailRegister = actionClient
     });
 
     if (existingUser) {
+      if (!existingUser.emailVerified) {
+        const token = await generateEmailVerificationToken(email);
+        const { error } = await sendEmailVerificationToken(email, token);
+
+        if (error) {
+          return { error: "Failed to send verification email" };
+        }
+
+        return { success: "Verification email sent!" };
+      }
+
       return { error: "Email already in use" };
     }
 
@@ -28,5 +41,12 @@ export const emailRegister = actionClient
       password: hashedPassword,
     });
 
-    return { success: "User registered" };
+    const token = await generateEmailVerificationToken(email);
+    const { error } = await sendEmailVerificationToken(email, token);
+
+    if (error) {
+      return { error: "Failed to send verification email" };
+    }
+
+    return { success: "Verification email sent!" };
   });
