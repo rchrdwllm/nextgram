@@ -13,7 +13,7 @@ export const navLinks = [
   },
   {
     label: "create",
-    href: "/create",
+    href: undefined,
     Icon: PlusSquareIcon,
   },
   {
