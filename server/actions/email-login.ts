@@ -41,9 +41,8 @@ export const emailLogin = actionClient
         redirect: false,
       });
 
-      return { success: "User logged in" };
+      return { success: "Login successful, redirecting..." };
     } catch (error) {
-      console.log(error);
       return { error: "Failed to log in" };
     }
   });

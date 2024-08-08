@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, Settings, User } from "lucide-react";
+import { Bookmark, LogOut, Settings, User } from "lucide-react";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import {
   DropdownMenu,
@@ -59,6 +59,10 @@ const UserButton = ({ user }: { user: UserType }) => {
         <DropdownMenuItem className="flex gap-2 cursor-pointer">
           <User className="w-4 h-4" />
           <span>Profile</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem className="flex gap-2 cursor-pointer">
+          <Bookmark className="w-4 h-4" />
+          <span>Saved</span>
         </DropdownMenuItem>
         <Link href="/dashboard/settings">
           <DropdownMenuItem className="flex gap-2 cursor-pointer">

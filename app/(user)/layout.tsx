@@ -10,7 +10,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <main>
       <Nav />
-      {children}
+      <div className="px-4 py-8">{children}</div>
     </main>
   );
 };

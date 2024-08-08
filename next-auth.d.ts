@@ -11,4 +11,6 @@ declare module "next-auth" {
   interface Session {
     user: ExtendUser;
   }
+
+  interface User extends ExtendUser {}
 }
