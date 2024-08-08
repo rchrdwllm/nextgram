@@ -55,3 +55,10 @@ export const passwordResetTokens = pgTable("passwordResetToken", {
   expires: timestamp("expires").notNull(),
   email: text("email").notNull(),
 });
+
+export const twoFactorTokens = pgTable("twoFactorToken", {
+  token: text("token").primaryKey().notNull(),
+  expires: timestamp("expires").notNull(),
+  email: text("email").notNull(),
+  password: text("password"),
+});

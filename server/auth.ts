@@ -5,7 +5,7 @@ import Credentials from "next-auth/providers/credentials";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "@/server";
 import { eq } from "drizzle-orm";
-import { accounts, users } from "./schema";
+import { accounts, twoFactorTokens, users } from "./schema";
 import { loginSchema } from "@/form_schemas/login-schema";
 import bcrypt from "bcrypt";
 
@@ -28,15 +28,35 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       allowDangerousEmailAccountLinking: true,
     }),
     Credentials({
+      credentials: {},
       authorize: async (credentials) => {
         const validatedFields = loginSchema.safeParse(credentials);
 
+        console.log(validatedFields.data);
         if (validatedFields.success) {
-          const { email, password } = validatedFields.data;
+          const { email, password, code } = validatedFields.data;
 
           const user = await db.query.users.findFirst({
             where: eq(users.email, email),
           });
+
+          if (code) {
+            const token = await db.query.twoFactorTokens.findFirst({
+              where: eq(twoFactorTokens.token, code),
+            });
+
+            console.log(code);
+
+            if (!token) return null;
+
+            if (token.expires < new Date()) {
+              return null;
+            }
+
+            if (!user) return null;
+
+            return user;
+          }
 
           if (!user || !user.password) return null;
 

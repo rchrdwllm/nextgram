@@ -37,3 +37,18 @@ export const sendPasswordResetToken = async (email: string, token: string) => {
     error,
   };
 };
+
+export const send2FAToken = async (email: string, token: string) => {
+  const { data, error } = await resend.emails.send({
+    from: "Nextgram <onboarding@resend.dev>",
+    to: [email],
+    subject: "Nextgram - 2FA",
+    html: `<h1>2FA</h1>
+      <p>Here is your token: ${token}</p>`,
+  });
+
+  return {
+    success: data,
+    error,
+  };
+};

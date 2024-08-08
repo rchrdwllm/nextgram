@@ -3,7 +3,13 @@
 import crypto from "crypto";
 import { db } from "..";
 import { eq } from "drizzle-orm";
-import { emailVerificationTokens, passwordResetTokens, users } from "../schema";
+import {
+  emailVerificationTokens,
+  passwordResetTokens,
+  twoFactorTokens,
+  users,
+} from "../schema";
+import bcrypt from "bcrypt";
 
 export const generateEmailVerificationToken = async (email: string) => {
   const token = crypto.randomUUID();
@@ -101,4 +107,28 @@ export const getPasswordResetTokenByToken = async (token: string) => {
   });
 
   return existingToken;
+};
+
+export const generate2FAToken = async (email: string, password: string) => {
+  const token = crypto.randomInt(100_000, 1_000_000).toString();
+  const expires = new Date(new Date().getTime() + 3600 * 1000);
+
+  const existingToken = await db.query.twoFactorTokens.findFirst({
+    where: eq(twoFactorTokens.email, email),
+  });
+
+  if (existingToken) {
+    await db.delete(twoFactorTokens).where(eq(twoFactorTokens.email, email));
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  await db.insert(twoFactorTokens).values({
+    email,
+    token,
+    expires,
+    password: hashedPassword,
+  });
+
+  return token;
 };

@@ -47,6 +47,13 @@ const LoginForm = () => {
         toast.success(data.emailSuccess);
       }
 
+      if (data?.twoFactorSuccess) {
+        toast.dismiss();
+        toast.success(data.twoFactorSuccess);
+
+        router.push("/two-factor");
+      }
+
       if (data?.error) {
         toast.dismiss();
         toast.error(data.error);

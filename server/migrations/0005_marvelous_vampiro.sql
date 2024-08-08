@@ -1,0 +1,1 @@
+ALTER TABLE "twoFactorToken" ADD COLUMN "password" text NOT NULL;
