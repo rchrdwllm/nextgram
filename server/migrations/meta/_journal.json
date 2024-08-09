@@ -78,6 +78,20 @@
       "when": 1723174246209,
       "tag": "0010_dry_riptide",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1723194105873,
+      "tag": "0011_swift_spiral",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1723198954172,
+      "tag": "0012_colossal_squadron_sinister",
+      "breakpoints": true
     }
   ]
 }

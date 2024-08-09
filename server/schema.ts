@@ -91,11 +91,24 @@ export const postLikes = pgTable("postLike", {
   postId: text("postId")
     .notNull()
     .references(() => posts.id, { onDelete: "cascade" }),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export const postBookmarks = pgTable("postBookmark", {
+  id: serial("id").primaryKey(),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  postId: text("postId")
+    .notNull()
+    .references(() => posts.id, { onDelete: "cascade" }),
+  createdAt: timestamp("createdAt").defaultNow(),
 });
 
 export const userRelations = relations(users, ({ many }) => ({
   posts: many(posts, { relationName: "posts" }),
   postLikes: many(postLikes, { relationName: "userPostLikes" }),
+  postBookmarks: many(postBookmarks, { relationName: "userPostBookmarks" }),
 }));
 
 export const postRelations = relations(posts, ({ many, one }) => ({
@@ -106,6 +119,7 @@ export const postRelations = relations(posts, ({ many, one }) => ({
   }),
   postImages: many(postImages, { relationName: "postImages" }),
   postLikes: many(postLikes, { relationName: "postLikes" }),
+  postBookmarks: many(postBookmarks, { relationName: "postBookmarks" }),
 }));
 
 export const postImagesRelations = relations(postImages, ({ one }) => ({
@@ -126,5 +140,18 @@ export const postLikesRelations = relations(postLikes, ({ one }) => ({
     fields: [postLikes.postId],
     references: [posts.id],
     relationName: "postLikes",
+  }),
+}));
+
+export const postBookmarksRelations = relations(postBookmarks, ({ one }) => ({
+  user: one(users, {
+    fields: [postBookmarks.userId],
+    references: [users.id],
+    relationName: "userPostBookmarks",
+  }),
+  post: one(posts, {
+    fields: [postBookmarks.postId],
+    references: [posts.id],
+    relationName: "postBookmarks",
   }),
 }));

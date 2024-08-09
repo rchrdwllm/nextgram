@@ -17,6 +17,10 @@ export const createPost = actionClient
       return { error: "You must be logged in to create a post" };
     }
 
+    if (!parsedInput.images.length) {
+      return { error: "You must upload at least one image" };
+    }
+
     try {
       const [newPost] = await db
         .insert(posts)
@@ -42,5 +46,7 @@ export const createPost = actionClient
       return { success: "Post created" };
     } catch (error) {
       return { error: "Failed to create post" };
+    } finally {
+      revalidatePath("/feed");
     }
   });
