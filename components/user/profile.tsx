@@ -1,9 +1,11 @@
 import { Avatar, AvatarImage } from "../ui/avatar";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { User } from "@/lib/infer-type";
+import { UserWithPosts } from "@/lib/infer-type";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import UserPosts from "./user-posts";
 
-const Profile = ({ user }: { user: User }) => {
+const Profile = ({ user }: { user: UserWithPosts }) => {
   return (
     <div>
       <header className="flex flex-col gap-4">
@@ -20,7 +22,7 @@ const Profile = ({ user }: { user: User }) => {
             </div>
           )}
           <div>
-            <p className="text-center font-medium">16</p>
+            <p className="text-center font-medium">{user.posts.length}</p>
             <p className="text-muted-foreground">posts</p>
           </div>
           <div>
@@ -42,7 +44,22 @@ const Profile = ({ user }: { user: User }) => {
             Edit profile
           </Button>
         </Link>
-        {/* tabs for posts, bookmarks, and likes */}
+        <Tabs defaultValue="posts" className="w-full">
+          <TabsList className="w-full">
+            <TabsTrigger className="w-full" value="posts">
+              Posts
+            </TabsTrigger>
+            <TabsTrigger className="w-full" value="likes">
+              Likes
+            </TabsTrigger>
+            <TabsTrigger className="w-full" value="bookmarks">
+              Saved
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="posts" className="mt-4">
+            <UserPosts posts={user.posts} />
+          </TabsContent>
+        </Tabs>
       </header>
     </div>
   );

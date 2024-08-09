@@ -28,6 +28,10 @@ export type InferResultType<
 
 export type User = InferResultType<"users">;
 
+export type UserWithPosts = InferResultType<"users", { posts: true }>;
+
+export type Post = InferResultType<"posts">;
+
 export type PostWithDetails = InferResultType<
   "posts",
   { postImages: true; user: true; postLikes: true; postBookmarks: true }
