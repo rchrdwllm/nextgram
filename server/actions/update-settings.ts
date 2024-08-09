@@ -77,8 +77,6 @@ export const updateSettings = actionClient
           })
           .where(eq(users.id, parsedInput.id));
 
-        revalidatePath("/dashboard/settings");
-
         return { success: "User settings updated" };
       }
 
@@ -89,10 +87,11 @@ export const updateSettings = actionClient
         })
         .where(eq(users.id, parsedInput.id));
 
-      revalidatePath("/dashboard/settings");
-
       return { success: "User settings updated" };
     } catch (error) {
       return { error: "Failed to update settings" };
+    } finally {
+      revalidatePath("/dashboard/settings");
+      revalidatePath("/(user)/user/[id]", "page");
     }
   });

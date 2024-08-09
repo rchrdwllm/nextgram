@@ -1,7 +1,7 @@
-import { User } from "next-auth";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { User } from "@/lib/infer-type";
 
 const Profile = ({ user }: { user: User }) => {
   return (
@@ -35,6 +35,7 @@ const Profile = ({ user }: { user: User }) => {
         <div>
           <p className="font-medium">{user.name}</p>
           <p className="text-muted-foreground">{user.email}</p>
+          {user.bio && <p className="mt-2">{user.bio}</p>}
         </div>
         <Link href="/dashboard/settings">
           <Button variant="secondary" className="w-full">

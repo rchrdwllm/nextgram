@@ -23,6 +23,7 @@ import { updateSettings } from "@/server/actions/update-settings";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { Textarea } from "../ui/textarea";
 
 const SettingsForm = ({ session: { user } }: { session: Session }) => {
   const form = useForm<z.infer<typeof settingsSchema>>({
@@ -35,6 +36,7 @@ const SettingsForm = ({ session: { user } }: { session: Session }) => {
       twoFactorEnabled: user.twoFactorEnabled ?? false,
       id: user.id,
       image: user.image ?? undefined,
+      bio: user.bio ?? "",
     },
   });
   const [isAvatarUploading, setIsAvatarUploading] = useState(false);
@@ -59,6 +61,7 @@ const SettingsForm = ({ session: { user } }: { session: Session }) => {
     form.setValue("name", user.name ?? "");
     form.setValue("email", user.email ?? "");
     form.setValue("twoFactorEnabled", user.twoFactorEnabled ?? false);
+    form.setValue("bio", user.bio ?? "");
   }, []);
 
   const handleSubmit = (values: z.infer<typeof settingsSchema>) => {
@@ -137,6 +140,18 @@ const SettingsForm = ({ session: { user } }: { session: Session }) => {
                   type="email"
                   {...field}
                 />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="bio"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Bio</FormLabel>
+              <FormControl>
+                <Textarea placeholder="I'm a developer" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

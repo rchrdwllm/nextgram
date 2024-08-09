@@ -20,6 +20,7 @@ export const users = pgTable("user", {
   image: text("image"),
   password: text("password"),
   twoFactorEnabled: boolean("twoFactorEnabled").default(false),
+  bio: text("bio"),
 });
 
 export const accounts = pgTable(

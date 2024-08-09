@@ -17,6 +17,7 @@ export const settingsSchema = z.object({
       message: "Enter a valid email",
     })
   ),
+  bio: z.optional(z.string()),
   currentPassword: z.optional(
     z.string().min(8, {
       message: "Enter at least 8 characters",
