@@ -16,6 +16,10 @@ import ImageCarousel from "./image-carousel";
 import { Button } from "../ui/button";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Textarea } from "../ui/textarea";
+import { useAction } from "next-safe-action/hooks";
+import { createPost } from "@/server/actions/create-post";
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 const CreateForm = ({
   onOpenChange,
@@ -35,9 +39,26 @@ const CreateForm = ({
     name: "images",
   });
   const [isUploading, setIsUploading] = useState(false);
+  const { execute, status } = useAction(createPost, {
+    onExecute: () => {
+      toast.loading("Creating post...");
+    },
+    onSuccess: ({ data }) => {
+      if (data?.success) {
+        toast.dismiss();
+        toast.success("Post created successfully");
+        onOpenChange(false);
+      }
+
+      if (data?.error) {
+        toast.dismiss();
+        toast.error(data.error);
+      }
+    },
+  });
 
   const handleSubmit = (values: z.infer<typeof createSchema>) => {
-    console.log(values);
+    execute(values);
   };
 
   return (
@@ -119,7 +140,14 @@ const CreateForm = ({
             >
               Cancel
             </Button>
-            <Button disabled={isUploading} type="submit" className="w-full">
+            <Button
+              disabled={isUploading}
+              type="submit"
+              className={cn(
+                "w-full",
+                status === "executing" && "animate-pulse pointer-events-none"
+              )}
+            >
               Post
             </Button>
           </div>

@@ -1,5 +1,7 @@
+import Posts from "@/components/post/posts";
+
 const FeedPage = () => {
-  return <div>FeedPage</div>;
+  return <Posts />;
 };
 
 export default FeedPage;

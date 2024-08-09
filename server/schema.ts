@@ -1,8 +1,10 @@
+import { relations } from "drizzle-orm";
 import {
   boolean,
   integer,
   pgTable,
   primaryKey,
+  serial,
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
@@ -62,3 +64,67 @@ export const twoFactorTokens = pgTable("twoFactorToken", {
   email: text("email").notNull(),
   password: text("password"),
 });
+
+export const posts = pgTable("post", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  caption: text("caption"),
+  createdAt: timestamp("createdAt").defaultNow(),
+  userId: text("userId").references(() => users.id, { onDelete: "cascade" }),
+});
+
+export const postImages = pgTable("postImage", {
+  id: serial("id").primaryKey(),
+  url: text("url").notNull(),
+  name: text("name").notNull(),
+  size: integer("size").notNull(),
+  key: text("key").notNull(),
+  postId: text("postId").references(() => posts.id, { onDelete: "cascade" }),
+});
+
+export const postLikes = pgTable("postLike", {
+  id: serial("id").primaryKey(),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  postId: text("postId")
+    .notNull()
+    .references(() => posts.id, { onDelete: "cascade" }),
+});
+
+export const userRelations = relations(users, ({ many }) => ({
+  posts: many(posts, { relationName: "posts" }),
+  postLikes: many(postLikes, { relationName: "userPostLikes" }),
+}));
+
+export const postRelations = relations(posts, ({ many, one }) => ({
+  user: one(users, {
+    fields: [posts.userId],
+    references: [users.id],
+    relationName: "posts",
+  }),
+  postImages: many(postImages, { relationName: "postImages" }),
+  postLikes: many(postLikes, { relationName: "postLikes" }),
+}));
+
+export const postImagesRelations = relations(postImages, ({ one }) => ({
+  posts: one(posts, {
+    fields: [postImages.postId],
+    references: [posts.id],
+    relationName: "postImages",
+  }),
+}));
+
+export const postLikesRelations = relations(postLikes, ({ one }) => ({
+  user: one(users, {
+    fields: [postLikes.userId],
+    references: [users.id],
+    relationName: "userPostLikes",
+  }),
+  post: one(posts, {
+    fields: [postLikes.postId],
+    references: [posts.id],
+    relationName: "postLikes",
+  }),
+}));
