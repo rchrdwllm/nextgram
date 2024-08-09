@@ -28,9 +28,11 @@ export type InferResultType<
 
 export type PostWithDetails = InferResultType<
   "posts",
-  { postImages: true; user: true; postLikes: true }
+  { postImages: true; user: true; postLikes: true; postBookmarks: true }
 >;
 
 export type PostImage = InferResultType<"postImages">;
 
 export type PostLike = InferResultType<"postLikes">;
+
+export type PostBookmark = InferResultType<"postBookmarks">;

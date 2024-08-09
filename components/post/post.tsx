@@ -5,6 +5,7 @@ import PostImagesCarousel from "./post-images-carousel";
 import PostActions from "./post-actions";
 import { auth } from "@/server/auth";
 import { getPostLikeByIdAndUserId } from "@/lib/like";
+import { getBookmarkByIdAndUserId } from "@/lib/bookmark";
 
 const Post = async ({ post }: { post: PostWithDetails }) => {
   const session = await auth();
@@ -13,6 +14,12 @@ const Post = async ({ post }: { post: PostWithDetails }) => {
 
   const likedPost = await getPostLikeByIdAndUserId(post.id, session.user.id);
   const isLiked = likedPost ? true : false;
+
+  const bookmarkedPost = await getBookmarkByIdAndUserId(
+    post.id,
+    session.user.id
+  );
+  const isBookmarked = bookmarkedPost ? true : false;
 
   return (
     <Card>
@@ -32,7 +39,11 @@ const Post = async ({ post }: { post: PostWithDetails }) => {
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         <PostImagesCarousel postImages={post.postImages} />
-        <PostActions post={post} isLiked={isLiked} />
+        <PostActions
+          post={post}
+          isLiked={isLiked}
+          isBookmarked={isBookmarked}
+        />
         <p className="text-muted-foreground text-sm">
           <span className="text-primary font-medium">{post.user.name}</span>{" "}
           {post.caption}

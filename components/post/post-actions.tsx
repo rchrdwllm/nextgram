@@ -11,9 +11,10 @@ import { useOptimistic } from "react";
 type PostActionsProps = {
   post: PostWithDetails;
   isLiked: boolean;
+  isBookmarked: boolean;
 };
 
-const PostActions = ({ post, isLiked }: PostActionsProps) => {
+const PostActions = ({ post, isLiked, isBookmarked }: PostActionsProps) => {
   const [optimisticLikeCount, setOptimisticLikeCount] = useOptimistic(
     post.postLikes.length,
     (currentPostLikes, newPostLike: "like" | "unlike") => {
@@ -37,7 +38,7 @@ const PostActions = ({ post, isLiked }: PostActionsProps) => {
           <ReplyButton />
           <ShareButton />
         </div>
-        <BookmarkButton />
+        <BookmarkButton isBookmarked={isBookmarked} postId={post.id} />
       </div>
       <LikeCount postLikes={optimisticLikeCount} />
     </>
