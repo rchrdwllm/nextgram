@@ -11,7 +11,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <main className="min-h-screen">
       <Nav />
-      <div className="h-full px-4 py-8">{children}</div>
+      <div className="min-h-[90vh] px-4 py-8">{children}</div>
       <MobileBottomNav />
     </main>
   );
