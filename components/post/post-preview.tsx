@@ -16,7 +16,7 @@ const PostPreview = async ({ postId }: { postId: string }) => {
   }
 
   return (
-    <Link href="/">
+    <Link href={`/posts?userId=${post.userId}#${post.id}`}>
       <AspectRatio ratio={1}>
         <Image
           src={post.postImages[0].url}

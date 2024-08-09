@@ -22,36 +22,40 @@ const Post = async ({ post }: { post: PostWithDetails }) => {
   const isBookmarked = bookmarkedPost ? true : false;
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row gap-4 space-y-0 items-center">
-        {post.user.image ? (
-          <Avatar className="h-8 w-8">
-            <AvatarImage src={post.user.image} />
-          </Avatar>
-        ) : (
-          <div className="group flex items-center justify-center w-8 h-8 bg-muted rounded-full transition-colors hover:bg-primary">
-            <p className="text-sm font-medium transition-colors group-hover:text-primary-foreground">
-              {post.user.name![0]}
+    <a id={post.id}>
+      <Card>
+        <CardHeader className="flex flex-row gap-4 space-y-0 items-center">
+          {post.user.image ? (
+            <Avatar className="h-8 w-8">
+              <AvatarImage src={post.user.image} />
+            </Avatar>
+          ) : (
+            <div className="group flex items-center justify-center w-8 h-8 bg-muted rounded-full transition-colors hover:bg-primary">
+              <p className="text-sm font-medium transition-colors group-hover:text-primary-foreground">
+                {post.user.name![0]}
+              </p>
+            </div>
+          )}
+          <h1 className="text-sm space-y-0 mt-0 font-medium">
+            {post.user.name}
+          </h1>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-4">
+          <PostImagesCarousel postImages={post.postImages} />
+          <PostActions
+            post={post}
+            isLiked={isLiked}
+            isBookmarked={isBookmarked}
+          />
+          {post.caption && (
+            <p className="text-muted-foreground text-sm">
+              <span className="text-primary font-medium">{post.user.name}</span>{" "}
+              {post.caption}
             </p>
-          </div>
-        )}
-        <h1 className="text-sm space-y-0 mt-0 font-medium">{post.user.name}</h1>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4">
-        <PostImagesCarousel postImages={post.postImages} />
-        <PostActions
-          post={post}
-          isLiked={isLiked}
-          isBookmarked={isBookmarked}
-        />
-        {post.caption && (
-          <p className="text-muted-foreground text-sm">
-            <span className="text-primary font-medium">{post.user.name}</span>{" "}
-            {post.caption}
-          </p>
-        )}
-      </CardContent>
-    </Card>
+          )}
+        </CardContent>
+      </Card>
+    </a>
   );
 };
 
