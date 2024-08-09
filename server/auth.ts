@@ -100,11 +100,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (session.user) {
         session.user.name = token.name;
         session.user.email = token.email as string;
-        session.user.image = token.image as string;
         session.user.twoFactorEnabled = token.twoFactorEnabled as boolean;
-        session.user.image = token.image as string;
         session.user.isOAuth = token.isOAuth as boolean;
         session.user.bio = token.bio as string;
+      }
+
+      if (session.user.isOAuth) {
+        session.user.image = token.image as string;
       }
 
       return session;
