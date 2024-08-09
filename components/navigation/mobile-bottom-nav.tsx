@@ -26,7 +26,7 @@ const MobileBottomNav = () => {
   return (
     <nav
       suppressHydrationWarning
-      className="border-t p-4 sticky bottom-0 flex justify-between items-center"
+      className="border-t p-4 sticky bottom-0 flex justify-between items-center z-10 bg-card"
     >
       {navLinks.map((link) => (
         <TooltipProvider key={link.label}>
