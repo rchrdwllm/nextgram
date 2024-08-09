@@ -1,13 +1,13 @@
 "use client";
 
-import { Toggle } from "../ui/toggle";
+import { Button } from "../ui/button";
 import { MessageCircle } from "lucide-react";
 
 const ReplyButton = () => {
   return (
-    <Toggle>
+    <Button variant="ghost" className="px-3">
       <MessageCircle className="w-4 h-4" />
-    </Toggle>
+    </Button>
   );
 };
 

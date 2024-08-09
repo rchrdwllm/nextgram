@@ -1,13 +1,13 @@
 "use client";
 
-import { Toggle } from "../ui/toggle";
+import { Button } from "../ui/button";
 import { Share } from "lucide-react";
 
 const ShareButton = () => {
   return (
-    <Toggle>
+    <Button variant="ghost" className="px-3">
       <Share className="w-4 h-4" />
-    </Toggle>
+    </Button>
   );
 };
 
