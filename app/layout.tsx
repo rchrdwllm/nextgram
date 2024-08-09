@@ -3,6 +3,7 @@ import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import ThemeProvider from "@/components/ui/theme-provider";
+import TopLoader from "@/components/ui/top-loader";
 import { SessionProvider } from "next-auth/react";
 import { cn } from "@/lib/utils";
 
@@ -21,6 +22,7 @@ export default function RootLayout({
       <body className={GeistSans.className}>
         <SessionProvider>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+            <TopLoader />
             <Toaster
               className={cn(GeistSans.className, "bg-primary")}
               richColors

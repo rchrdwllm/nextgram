@@ -54,6 +54,7 @@
     "next-auth": "^5.0.0-beta.16",
     "next-safe-action": "^7.4.3",
     "next-themes": "^0.3.0",
+    "nextjs-toploader": "^1.6.12",
     "perf_hooks": "^0.0.1",
     "postgres": "^3.4.4",
     "react": "^18",
