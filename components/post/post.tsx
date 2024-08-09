@@ -44,10 +44,12 @@ const Post = async ({ post }: { post: PostWithDetails }) => {
           isLiked={isLiked}
           isBookmarked={isBookmarked}
         />
-        <p className="text-muted-foreground text-sm">
-          <span className="text-primary font-medium">{post.user.name}</span>{" "}
-          {post.caption}
-        </p>
+        {post.caption && (
+          <p className="text-muted-foreground text-sm">
+            <span className="text-primary font-medium">{post.user.name}</span>{" "}
+            {post.caption}
+          </p>
+        )}
       </CardContent>
     </Card>
   );
