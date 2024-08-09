@@ -42,5 +42,6 @@ export const likePost = actionClient
       return { error: "Failed to like post" };
     } finally {
       revalidatePath("/feed");
+      revalidatePath("/(user)/user/[id]", "page");
     }
   });

@@ -44,5 +44,6 @@ export const bookmarkPost = actionClient
       return { error: "Failed to bookmark post" };
     } finally {
       revalidatePath("/feed");
+      revalidatePath("/(user)/user/[id]", "page");
     }
   });

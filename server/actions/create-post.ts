@@ -41,12 +41,11 @@ export const createPost = actionClient
         });
       });
 
-      revalidatePath("/feed");
-
       return { success: "Post created" };
     } catch (error) {
       return { error: "Failed to create post" };
     } finally {
       revalidatePath("/feed");
+      revalidatePath("/(user)/user/[id]", "page");
     }
   });
