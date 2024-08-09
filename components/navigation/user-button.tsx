@@ -56,10 +56,12 @@ const UserButton = ({ user }: { user: UserType }) => {
           <p className="text-xs">{user.email}</p>
         </div>
         <DropdownMenuSeparator className="my-4" />
-        <DropdownMenuItem className="flex gap-2 cursor-pointer">
-          <User className="w-4 h-4" />
-          <span>Profile</span>
-        </DropdownMenuItem>
+        <Link href={`/user/${user.id}`}>
+          <DropdownMenuItem className="flex gap-2 cursor-pointer">
+            <User className="w-4 h-4" />
+            <span>Profile</span>
+          </DropdownMenuItem>
+        </Link>
         <DropdownMenuItem className="flex gap-2 cursor-pointer">
           <Bookmark className="w-4 h-4" />
           <span>Saved</span>
