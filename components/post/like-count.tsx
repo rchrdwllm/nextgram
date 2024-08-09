@@ -1,11 +1,9 @@
-import { PostLike } from "@/lib/infer-type";
-
-const LikeCount = ({ postLikes }: { postLikes: PostLike[] }) => {
-  if (!postLikes || !postLikes.length) return null;
+const LikeCount = ({ postLikes }: { postLikes: number }) => {
+  if (postLikes === 0) return null;
 
   return (
     <p className="text-sm font-medium">
-      {postLikes.length} {postLikes.length === 1 ? "like" : "likes"}
+      {postLikes} {postLikes === 1 ? "like" : "likes"}
     </p>
   );
 };

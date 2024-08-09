@@ -3,6 +3,7 @@ import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import ThemeProvider from "@/components/ui/theme-provider";
+import { SessionProvider } from "next-auth/react";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -18,13 +19,15 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={GeistSans.className}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          <Toaster
-            className={cn(GeistSans.className, "bg-primary")}
-            richColors
-          />
-          {children}
-        </ThemeProvider>
+        <SessionProvider>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+            <Toaster
+              className={cn(GeistSans.className, "bg-primary")}
+              richColors
+            />
+            {children}
+          </ThemeProvider>
+        </SessionProvider>
       </body>
     </html>
   );

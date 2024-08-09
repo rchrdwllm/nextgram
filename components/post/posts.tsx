@@ -7,7 +7,7 @@ const Posts = async () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       {success?.map((post) => (
         <Post key={post.id} post={post} />
       ))}

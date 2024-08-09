@@ -6,6 +6,7 @@ import { auth } from "../auth";
 import { postLikes } from "../schema";
 import { actionClient } from "./action-client";
 import { likeSchema } from "@/form_schemas/like-schema";
+import { revalidatePath } from "next/cache";
 
 export const likePost = actionClient
   .schema(likeSchema)
@@ -39,5 +40,7 @@ export const likePost = actionClient
       return { success: "Post liked" };
     } catch (error) {
       return { error: "Failed to like post" };
+    } finally {
+      revalidatePath("/feed");
     }
   });

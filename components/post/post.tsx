@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import PostImagesCarousel from "./post-images-carousel";
 import PostActions from "./post-actions";
-import LikeCount from "./like-count";
 import { auth } from "@/server/auth";
 import { getPostLikeByIdAndUserId } from "@/lib/like";
 
@@ -34,9 +33,9 @@ const Post = async ({ post }: { post: PostWithDetails }) => {
       <CardContent className="flex flex-col gap-4">
         <PostImagesCarousel postImages={post.postImages} />
         <PostActions post={post} isLiked={isLiked} />
-        <LikeCount postLikes={post.postLikes} />
         <p className="text-muted-foreground text-sm">
-          <span className="text-primary">{post.user.name}</span> {post.caption}
+          <span className="text-primary font-medium">{post.user.name}</span>{" "}
+          {post.caption}
         </p>
       </CardContent>
     </Card>

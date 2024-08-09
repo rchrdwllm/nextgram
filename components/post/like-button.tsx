@@ -4,19 +4,28 @@ import { useAction } from "next-safe-action/hooks";
 import { Toggle } from "../ui/toggle";
 import { Heart } from "lucide-react";
 import { likePost } from "@/server/actions/like-post";
-import { startTransition, useContext, useState } from "react";
+import { startTransition, useState } from "react";
 
 type LikeButtonProps = {
   postId: string;
   isLiked: boolean;
+  setOptimisticLikeCount: (action: "like" | "unlike") => void;
 };
 
-const LikeButton = ({ postId, isLiked: defaultLiked }: LikeButtonProps) => {
+const LikeButton = ({
+  postId,
+  isLiked: defaultLiked,
+  setOptimisticLikeCount,
+}: LikeButtonProps) => {
   const [isLiked] = useState(defaultLiked);
   const { execute } = useAction(likePost);
 
   const handleLike = (isLiked: boolean) => {
-    execute({ postId });
+    startTransition(() => {
+      setOptimisticLikeCount(isLiked ? "like" : "unlike");
+
+      execute({ postId });
+    });
   };
 
   return (

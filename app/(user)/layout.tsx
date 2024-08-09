@@ -9,7 +9,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
   if (!session) return redirect("/");
 
   return (
-    <main className="h-screen">
+    <main className="min-h-screen">
       <Nav />
       <div className="h-full px-4 py-8">{children}</div>
       <MobileBottomNav />
