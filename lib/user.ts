@@ -1,5 +1,5 @@
 import { db } from "@/server";
-import { posts, users } from "@/server/schema";
+import { postBookmarks, postLikes, posts, users } from "@/server/schema";
 import { desc, eq } from "drizzle-orm";
 
 export const getUserById = async (userId: string) => {
@@ -21,6 +21,12 @@ export const getUserByIdWithPosts = async (userId: string) => {
       with: {
         posts: {
           orderBy: desc(posts.createdAt),
+        },
+        postLikes: {
+          orderBy: desc(postLikes.createdAt),
+        },
+        postBookmarks: {
+          orderBy: desc(postBookmarks.createdAt),
         },
       },
     });
