@@ -1,11 +1,17 @@
 import { Avatar, AvatarImage } from "../ui/avatar";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { UserWithPosts } from "@/lib/infer-type";
+import { UserWithPostsLikesBookmarks } from "@/lib/infer-type";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UserPosts from "./user-posts";
+import UserLikes from "./user-likes";
+import UserBookmarks from "./user-bookmarks";
+import { auth } from "@/server/auth";
 
-const Profile = ({ user }: { user: UserWithPosts }) => {
+const Profile = async ({ user }: { user: UserWithPostsLikesBookmarks }) => {
+  const session = await auth();
+  const isOwner = user.id === session?.user.id;
+
   return (
     <div>
       <header className="flex flex-col gap-4">
@@ -44,22 +50,32 @@ const Profile = ({ user }: { user: UserWithPosts }) => {
             Edit profile
           </Button>
         </Link>
-        <Tabs defaultValue="posts" className="w-full">
-          <TabsList className="w-full">
-            <TabsTrigger className="w-full" value="posts">
-              Posts
-            </TabsTrigger>
-            <TabsTrigger className="w-full" value="likes">
-              Likes
-            </TabsTrigger>
-            <TabsTrigger className="w-full" value="bookmarks">
-              Saved
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="posts" className="mt-4">
-            <UserPosts posts={user.posts} />
-          </TabsContent>
-        </Tabs>
+        {isOwner ? (
+          <Tabs defaultValue="posts" className="w-full">
+            <TabsList className="w-full">
+              <TabsTrigger className="w-full" value="posts">
+                Posts
+              </TabsTrigger>
+              <TabsTrigger className="w-full" value="postLikes">
+                Likes
+              </TabsTrigger>
+              <TabsTrigger className="w-full" value="postBookmarks">
+                Saved
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="posts" className="mt-4">
+              <UserPosts posts={user.posts} />
+            </TabsContent>
+            <TabsContent value="postLikes" className="mt-4">
+              <UserLikes postLikes={user.postLikes} />
+            </TabsContent>
+            <TabsContent value="postBookmarks" className="mt-4">
+              <UserBookmarks postBookmarks={user.postBookmarks} />
+            </TabsContent>
+          </Tabs>
+        ) : (
+          <UserPosts posts={user.posts} />
+        )}
       </header>
     </div>
   );
