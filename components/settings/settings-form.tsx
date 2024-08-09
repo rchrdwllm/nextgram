@@ -138,6 +138,7 @@ const SettingsForm = ({ session: { user } }: { session: Session }) => {
                 <Input
                   placeholder="john.doe@gmail.com"
                   type="email"
+                  disabled={user.isOAuth}
                   {...field}
                 />
               </FormControl>

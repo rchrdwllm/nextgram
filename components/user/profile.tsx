@@ -13,8 +13,8 @@ const Profile = ({ user }: { user: User }) => {
               <AvatarImage src={user.image} />
             </Avatar>
           ) : (
-            <div className="flex items-center justify-center w-8 h-8 bg-muted rounded-full">
-              <p className="text-sm font-medium transition-colors">
+            <div className="flex items-center justify-center w-24 h-24 bg-muted rounded-full">
+              <p className="text-2xl font-medium transition-colors">
                 {user.name![0]}
               </p>
             </div>
