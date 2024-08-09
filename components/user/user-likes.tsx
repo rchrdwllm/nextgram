@@ -6,7 +6,11 @@ const UserLikes = ({ postLikes }: { postLikes: PostLike[] }) => {
   return (
     <PostsGrid>
       {postLikes.map((postLike) => (
-        <PostPreview key={postLike.id} postId={postLike.postId} />
+        <PostPreview
+          tab="postLikes"
+          key={postLike.id}
+          postId={postLike.postId}
+        />
       ))}
     </PostsGrid>
   );

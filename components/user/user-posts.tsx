@@ -6,7 +6,7 @@ const UserPosts = ({ posts }: { posts: Post[] }) => {
   return (
     <PostsGrid>
       {posts.map((post) => (
-        <PostPreview key={post.id} postId={post.id} />
+        <PostPreview tab="posts" key={post.id} postId={post.id} />
       ))}
     </PostsGrid>
   );

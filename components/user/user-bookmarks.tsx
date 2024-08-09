@@ -10,7 +10,11 @@ const UserBookmarks = ({
   return (
     <PostsGrid>
       {postBookmarks.map((postBookmark) => (
-        <PostPreview key={postBookmark.id} postId={postBookmark.postId} />
+        <PostPreview
+          tab="postBookmarks"
+          key={postBookmark.id}
+          postId={postBookmark.postId}
+        />
       ))}
     </PostsGrid>
   );
