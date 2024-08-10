@@ -14,13 +14,21 @@ export const getPostIds = async () => {
   //     return { error: "Failed to fetch posts" };
   //   }
 
-  const result = await db.query.posts.findMany({
-    orderBy: desc(posts.createdAt),
-  });
+  try {
+    const result = await db.query.posts.findMany({
+      orderBy: desc(posts.createdAt),
+    });
 
-  const postIds = result.map((post) => post.id);
+    if (!result) {
+      return { error: "Failed to fetch posts" };
+    }
 
-  return { success: postIds };
+    const postIds = result.map((post) => post.id);
+
+    return { success: postIds };
+  } catch (error) {
+    return { error: "Failed to get posts" };
+  }
 };
 
 export const getPostById = async (postId: string) => {
