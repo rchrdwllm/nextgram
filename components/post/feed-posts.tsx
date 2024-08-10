@@ -1,7 +1,7 @@
 import { getPosts } from "@/lib/post";
 import Post from "./post";
 
-const Posts = async () => {
+const FeedPosts = async () => {
   const { success, error } = await getPosts();
 
   if (error) return <div>Error: {error}</div>;
@@ -15,4 +15,4 @@ const Posts = async () => {
   );
 };
 
-export default Posts;
+export default FeedPosts;
