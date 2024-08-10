@@ -13,26 +13,3 @@ export const getUserById = async (userId: string) => {
     return { error: "Failed to get user" };
   }
 };
-
-export const getUserByIdWithPosts = async (userId: string) => {
-  try {
-    const user = await db.query.users.findFirst({
-      where: eq(users.id, userId),
-      with: {
-        posts: {
-          orderBy: desc(posts.createdAt),
-        },
-        postLikes: {
-          orderBy: desc(postLikes.createdAt),
-        },
-        postBookmarks: {
-          orderBy: desc(postBookmarks.createdAt),
-        },
-      },
-    });
-
-    return { success: user };
-  } catch (error) {
-    return { error: "Failed to get user" };
-  }
-};

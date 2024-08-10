@@ -1,4 +1,3 @@
-import { PostWithDetails } from "@/lib/infer-type";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import PostImagesCarousel from "./post-images-carousel";
@@ -6,11 +5,27 @@ import PostActions from "./post-actions";
 import { auth } from "@/server/auth";
 import { getPostLikeByIdAndUserId } from "@/lib/like";
 import { getBookmarkByIdAndUserId } from "@/lib/bookmark";
+import { getPostById } from "@/lib/post";
+import { getUserById } from "@/lib/user";
 
-const Post = async ({ post }: { post: PostWithDetails }) => {
+const Post = async ({ postId }: { postId: string }) => {
   const session = await auth();
 
-  if (!post.user || !session) return null;
+  if (!session) return null;
+
+  const { success: post, error: postError } = await getPostById(postId);
+
+  if (postError) return <div>Error: {postError}</div>;
+
+  if (!post) return <div>Post not found</div>;
+
+  const { success: postUser, error: postUserError } = await getUserById(
+    post.userId!
+  );
+
+  if (postUserError) return <div>Error: {postUserError}</div>;
+
+  if (!postUser) return <div>User not found</div>;
 
   const likedPost = await getPostLikeByIdAndUserId(post.id, session.user.id);
   const isLiked = likedPost ? true : false;
@@ -25,13 +40,13 @@ const Post = async ({ post }: { post: PostWithDetails }) => {
     <a id={post.id}>
       <Card>
         <CardHeader className="flex flex-row gap-4 space-y-0 items-center">
-          {post.user.image ? (
+          {postUser.image ? (
             <Avatar className="h-8 w-8">
-              <AvatarImage src={post.user.image} className="object-cover" />
+              <AvatarImage src={postUser.image} className="object-cover" />
               <AvatarFallback>
                 <div className="group flex items-center justify-center w-8 h-8 bg-muted rounded-full transition-colors hover:bg-primary">
                   <p className="text-sm font-medium transition-colors group-hover:text-primary-foreground">
-                    {post.user.name![0]}
+                    {postUser.name![0]}
                   </p>
                 </div>
               </AvatarFallback>
@@ -39,12 +54,12 @@ const Post = async ({ post }: { post: PostWithDetails }) => {
           ) : (
             <div className="group flex items-center justify-center w-8 h-8 bg-muted rounded-full transition-colors hover:bg-primary">
               <p className="text-sm font-medium transition-colors group-hover:text-primary-foreground">
-                {post.user.name![0]}
+                {postUser.name![0]}
               </p>
             </div>
           )}
           <h1 className="text-sm space-y-0 mt-0 font-medium">
-            {post.user.name}
+            {postUser.name}
           </h1>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
@@ -56,7 +71,7 @@ const Post = async ({ post }: { post: PostWithDetails }) => {
           />
           {post.caption && (
             <p className="text-muted-foreground text-sm">
-              <span className="text-primary font-medium">{post.user.name}</span>{" "}
+              <span className="text-primary font-medium">{postUser.name}</span>{" "}
               {post.caption}
             </p>
           )}

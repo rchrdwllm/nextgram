@@ -2,11 +2,11 @@ import { Post } from "@/lib/infer-type";
 import PostsGrid from "../post/posts-grid";
 import PostPreview from "../post/post-preview";
 
-const UserPosts = ({ posts }: { posts: Post[] }) => {
+const UserPosts = ({ postIds }: { postIds: string[] }) => {
   return (
     <PostsGrid>
-      {posts.map((post) => (
-        <PostPreview tab="posts" key={post.id} postId={post.id} />
+      {postIds.map((postId) => (
+        <PostPreview tab="posts" key={postId} postId={postId} />
       ))}
     </PostsGrid>
   );

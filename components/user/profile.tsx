@@ -6,13 +6,16 @@ import UserPosts from "./user-posts";
 import UserLikes from "./user-likes";
 import UserBookmarks from "./user-bookmarks";
 import { auth } from "@/server/auth";
-import { getUserByIdWithPosts } from "@/lib/user";
+import { getUserById } from "@/lib/user";
+import { getUserPostIds } from "@/lib/post";
+import { getUserLikes } from "@/lib/like";
+import { getUserBookmarks } from "@/lib/bookmark";
 
 const Profile = async ({ userId }: { userId: string }) => {
   const session = await auth();
   const isOwner = userId === session?.user.id;
 
-  const { success: user, error } = await getUserByIdWithPosts(userId);
+  const { success: user, error } = await getUserById(userId);
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -21,6 +24,44 @@ const Profile = async ({ userId }: { userId: string }) => {
   if (!user) {
     return <div>User not found</div>;
   }
+
+  const { success: userPostIds, error: userPostIdsError } =
+    await getUserPostIds(userId);
+
+  if (userPostIdsError) {
+    return <div>Error: {userPostIdsError}</div>;
+  }
+
+  if (!userPostIds) {
+    return <div>User posts not found</div>;
+  }
+
+  const { success: userLikes, error: userLikesError } = await getUserLikes(
+    userId
+  );
+
+  if (userLikesError) {
+    return <div>Error: {userLikesError}</div>;
+  }
+
+  if (!userLikes) {
+    return <div>User likes not found</div>;
+  }
+
+  const userLikeIds = userLikes.map((like) => like.postId);
+
+  const { success: userBookmarks, error: userBookmarksError } =
+    await getUserBookmarks(userId);
+
+  if (userBookmarksError) {
+    return <div>Error: {userBookmarksError}</div>;
+  }
+
+  if (!userBookmarks) {
+    return <div>User bookmarks not found</div>;
+  }
+
+  const userBookmarkIds = userBookmarks.map((bookmark) => bookmark.postId);
 
   return (
     <div>
@@ -45,7 +86,7 @@ const Profile = async ({ userId }: { userId: string }) => {
             </div>
           )}
           <div>
-            <p className="text-center font-medium">{user.posts.length}</p>
+            <p className="text-center font-medium">{userPostIds.length}</p>
             <p className="text-muted-foreground">posts</p>
           </div>
           <div>
@@ -62,7 +103,7 @@ const Profile = async ({ userId }: { userId: string }) => {
           <p className="text-muted-foreground">{user.email}</p>
           {user.bio && <p className="mt-2">{user.bio}</p>}
         </div>
-        <Link href="/dashboard/settings">
+        <Link href="/settings">
           <Button variant="secondary" className="w-full">
             Edit profile
           </Button>
@@ -81,17 +122,17 @@ const Profile = async ({ userId }: { userId: string }) => {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="posts" className="mt-4">
-              <UserPosts posts={user.posts} />
+              <UserPosts postIds={userPostIds} />
             </TabsContent>
             <TabsContent value="postLikes" className="mt-4">
-              <UserLikes postLikes={user.postLikes} />
+              <UserLikes postIds={userLikeIds} />
             </TabsContent>
             <TabsContent value="postBookmarks" className="mt-4">
-              <UserBookmarks postBookmarks={user.postBookmarks} />
+              <UserBookmarks postIds={userBookmarkIds} />
             </TabsContent>
           </Tabs>
         ) : (
-          <UserPosts posts={user.posts} />
+          <UserPosts postIds={userPostIds} />
         )}
       </header>
     </div>

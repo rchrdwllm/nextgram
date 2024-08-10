@@ -1,20 +1,11 @@
-import { PostBookmark } from "@/lib/infer-type";
 import PostsGrid from "../post/posts-grid";
 import PostPreview from "../post/post-preview";
 
-const UserBookmarks = ({
-  postBookmarks,
-}: {
-  postBookmarks: PostBookmark[];
-}) => {
+const UserBookmarks = ({ postIds }: { postIds: string[] }) => {
   return (
     <PostsGrid>
-      {postBookmarks.map((postBookmark) => (
-        <PostPreview
-          tab="postBookmarks"
-          key={postBookmark.id}
-          postId={postBookmark.postId}
-        />
+      {postIds.map((postId) => (
+        <PostPreview tab="postBookmarks" key={postId} postId={postId} />
       ))}
     </PostsGrid>
   );

@@ -1,16 +1,11 @@
-import { PostLike } from "@/lib/infer-type";
 import PostsGrid from "../post/posts-grid";
 import PostPreview from "../post/post-preview";
 
-const UserLikes = ({ postLikes }: { postLikes: PostLike[] }) => {
+const UserLikes = ({ postIds }: { postIds: string[] }) => {
   return (
     <PostsGrid>
-      {postLikes.map((postLike) => (
-        <PostPreview
-          tab="postLikes"
-          key={postLike.id}
-          postId={postLike.postId}
-        />
+      {postIds.map((postId) => (
+        <PostPreview tab="postLikes" key={postId} postId={postId} />
       ))}
     </PostsGrid>
   );

@@ -1,23 +1,26 @@
 import { db } from "@/server";
-import { postBookmarks, postLikes, posts } from "@/server/schema";
-import { and, desc, eq, inArray } from "drizzle-orm";
+import { posts } from "@/server/schema";
+import { desc, eq } from "drizzle-orm";
 
-export const getPosts = async () => {
-  const allPosts = await db.query.posts.findMany({
-    with: {
-      postImages: true,
-      user: true,
-      postLikes: true,
-      postBookmarks: true,
-    },
-    orderBy: desc(posts.createdAt),
-  });
+export const getPostIds = async () => {
+  try {
+    const result = await db
+      .select({
+        postIds: posts.id,
+      })
+      .from(posts)
+      .orderBy(desc(posts.createdAt));
 
-  if (!allPosts) {
-    return { error: "Failed to fetch posts" };
+    if (!result) {
+      return { error: "Failed to fetch post IDs" };
+    }
+
+    const postIds = result.map((post) => post.postIds);
+
+    return { success: postIds };
+  } catch (error) {
+    return { error: "Failed to fetch post IDs" };
   }
-
-  return { success: allPosts };
 };
 
 export const getPostById = async (postId: string) => {
@@ -28,7 +31,6 @@ export const getPostById = async (postId: string) => {
         postImages: true,
         postLikes: true,
         postBookmarks: true,
-        user: true,
       },
     });
 
@@ -38,87 +40,68 @@ export const getPostById = async (postId: string) => {
   }
 };
 
-export const getPostsByUserId = async (userId: string) => {
+export const getUserPostIds = async (userId: string) => {
   try {
-    const userPosts = await db.query.posts.findMany({
-      where: eq(posts.userId, userId),
-      with: {
-        postImages: true,
-        postLikes: true,
-        postBookmarks: true,
-        user: true,
-      },
-      orderBy: desc(posts.createdAt),
-    });
+    const result = await db
+      .select({
+        postId: posts.id,
+      })
+      .from(posts)
+      .orderBy(desc(posts.createdAt))
+      .where(eq(posts.userId, userId));
 
-    return { success: userPosts };
+    if (!result) {
+      return { error: "Failed to fetch post IDs" };
+    }
+
+    const postIds = result.map((post) => post.postId);
+
+    return { success: postIds };
   } catch (error) {
-    return { error: "Failed to get posts" };
+    return { error: "Failed to get post IDs" };
   }
 };
 
-export const getPostsByUserLike = async (userId: string) => {
+export const getPostIdsByUserLike = async (userId: string) => {
   try {
-    const userPostLikes = await db.query.postLikes.findMany({
-      where: eq(postLikes.userId, userId),
-    });
+    const result = await db
+      .select({
+        postId: posts.id,
+      })
+      .from(posts)
+      .orderBy(desc(posts.createdAt))
+      .where(eq(posts.userId, userId));
 
-    if (!userPostLikes) {
-      return { error: "Failed to get posts" };
+    if (!result) {
+      return { error: "Failed to fetch post IDs" };
     }
 
-    const postIds = userPostLikes.map((postLike) => postLike.postId);
+    const postIds = result.map((post) => post.postId);
 
-    const likedPosts = await db.query.posts.findMany({
-      where: inArray(posts.id, postIds),
-      with: {
-        postImages: true,
-        postLikes: true,
-        postBookmarks: true,
-        user: true,
-      },
-    });
-
-    if (!likedPosts) {
-      return { error: "Failed to get posts" };
-    }
-
-    return { success: likedPosts };
+    return { success: postIds };
   } catch (error) {
-    return { error: "Failed to get posts" };
+    return { error: "Failed to get post IDs" };
   }
 };
 
-export const getPostsByUserBookmark = async (userId: string) => {
+export const getPostIdsByUserBookmark = async (userId: string) => {
   try {
-    const userPostBookmarks = await db.query.postBookmarks.findMany({
-      where: eq(postBookmarks.userId, userId),
-    });
+    const result = await db
+      .select({
+        postId: posts.id,
+      })
+      .from(posts)
+      .orderBy(desc(posts.createdAt))
+      .where(eq(posts.userId, userId));
 
-    if (!userPostBookmarks) {
-      return { error: "Failed to get posts" };
+    if (!result) {
+      return { error: "Failed to fetch post IDs" };
     }
 
-    const postIds = userPostBookmarks.map(
-      (postBookmark) => postBookmark.postId
-    );
+    const postIds = result.map((post) => post.postId);
 
-    const bookmarkedPosts = await db.query.posts.findMany({
-      where: inArray(posts.id, postIds),
-      with: {
-        postImages: true,
-        postLikes: true,
-        postBookmarks: true,
-        user: true,
-      },
-    });
-
-    if (!bookmarkedPosts) {
-      return { error: "Failed to get posts" };
-    }
-
-    return { success: bookmarkedPosts };
+    return { success: postIds };
   } catch (error) {
-    return { error: "Failed to get posts" };
+    return { error: "Failed to get post IDs" };
   }
 };

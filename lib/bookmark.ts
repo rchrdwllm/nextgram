@@ -1,6 +1,6 @@
 import { db } from "@/server";
 import { postBookmarks } from "@/server/schema";
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 
 export const getBookmarkByIdAndUserId = async (
   postId: string,
@@ -14,4 +14,21 @@ export const getBookmarkByIdAndUserId = async (
   });
 
   return bookmarkedPost;
+};
+
+export const getUserBookmarks = async (userId: string) => {
+  try {
+    const bookmarks = await db.query.postBookmarks.findMany({
+      where: eq(postBookmarks.userId, userId),
+      orderBy: desc(postBookmarks.createdAt),
+    });
+
+    if (!bookmarks) {
+      return { error: "Failed to get bookmarks" };
+    }
+
+    return { success: bookmarks };
+  } catch (error) {
+    return { error: "Failed to get bookmarks" };
+  }
 };
