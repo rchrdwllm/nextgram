@@ -12,6 +12,8 @@ const Profile = async ({ user }: { user: UserWithPostsLikesBookmarks }) => {
   const session = await auth();
   const isOwner = user.id === session?.user.id;
 
+  console.log(user.image);
+
   return (
     <div>
       <header className="flex flex-col gap-4">

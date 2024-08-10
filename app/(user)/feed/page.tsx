@@ -1,7 +1,13 @@
 import Posts from "@/components/post/posts";
+import LoadingFeed from "./loading";
+import { Suspense } from "react";
 
 const FeedPage = () => {
-  return <Posts />;
+  return (
+    <Suspense fallback={<LoadingFeed />}>
+      <Posts />
+    </Suspense>
+  );
 };
 
 export default FeedPage;
