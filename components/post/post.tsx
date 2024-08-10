@@ -27,7 +27,7 @@ const Post = async ({ post }: { post: PostWithDetails }) => {
         <CardHeader className="flex flex-row gap-4 space-y-0 items-center">
           {post.user.image ? (
             <Avatar className="h-8 w-8">
-              <AvatarImage src={post.user.image} />
+              <AvatarImage className="object-cover" src={post.user.image} />
             </Avatar>
           ) : (
             <div className="group flex items-center justify-center w-8 h-8 bg-muted rounded-full transition-colors hover:bg-primary">

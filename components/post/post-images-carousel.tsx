@@ -8,6 +8,7 @@ import {
 import { AspectRatio } from "../ui/aspect-ratio";
 import Image from "next/image";
 import { PostImage } from "@/lib/infer-type";
+import ImageWithBlur from "./image-with-blur";
 
 type ImageCarouselProps = {
   postImages: PostImage[];
@@ -21,12 +22,7 @@ const PostImagesCarousel = ({ postImages }: ImageCarouselProps) => {
           {postImages.map((image) => (
             <CarouselItem key={image.key}>
               <AspectRatio ratio={1}>
-                <Image
-                  fill
-                  src={image.url}
-                  alt=""
-                  className="rounded-md object-cover"
-                />
+                <ImageWithBlur url={image.url} alt={image.name} />
               </AspectRatio>
             </CarouselItem>
           ))}
