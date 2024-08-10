@@ -1,6 +1,6 @@
 import { PostWithDetails } from "@/lib/infer-type";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import PostImagesCarousel from "./post-images-carousel";
 import PostActions from "./post-actions";
 import { auth } from "@/server/auth";
@@ -28,6 +28,13 @@ const Post = async ({ post }: { post: PostWithDetails }) => {
           {post.user.image ? (
             <Avatar className="h-8 w-8">
               <AvatarImage src={post.user.image} />
+              <AvatarFallback>
+                <div className="group flex items-center justify-center w-8 h-8 bg-muted rounded-full transition-colors hover:bg-primary">
+                  <p className="text-sm font-medium transition-colors group-hover:text-primary-foreground">
+                    {post.user.name![0]}
+                  </p>
+                </div>
+              </AvatarFallback>
             </Avatar>
           ) : (
             <div className="group flex items-center justify-center w-8 h-8 bg-muted rounded-full transition-colors hover:bg-primary">
