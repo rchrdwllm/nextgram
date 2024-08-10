@@ -54,7 +54,10 @@ const UserButton = ({ user }: { user: UserType }) => {
         <div className="group flex flex-col gap-2 items-center justify-center rounded-md w-full py-6 bg-muted">
           {user.image ? (
             <Avatar className="h-8 w-8">
-              <AvatarImage src={user.image} />
+              <AvatarImage src={user.image} className="object-cover" />
+              <AvatarFallback>
+                <p className="font-medium">{user.name![0]}</p>
+              </AvatarFallback>
             </Avatar>
           ) : (
             <p className="font-medium">{user.name![0]}</p>
