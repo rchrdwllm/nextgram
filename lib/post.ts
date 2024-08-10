@@ -1,6 +1,7 @@
 import { db } from "@/server";
 import { posts } from "@/server/schema";
 import { desc, eq } from "drizzle-orm";
+import { unstable_cache } from "next/cache";
 
 export const getPostIds = async () => {
   try {
@@ -23,7 +24,7 @@ export const getPostIds = async () => {
   }
 };
 
-export const getPostById = async (postId: string) => {
+export const getPostById = unstable_cache(async (postId: string) => {
   try {
     const post = await db.query.posts.findFirst({
       where: eq(posts.id, postId),
@@ -34,11 +35,17 @@ export const getPostById = async (postId: string) => {
       },
     });
 
+    if (!post) {
+      return { error: "Post not found" };
+    }
+
+    console.log(post.id);
+
     return { success: post };
   } catch (error) {
     return { error: "Failed to get post" };
   }
-};
+});
 
 export const getUserPostIds = async (userId: string) => {
   try {

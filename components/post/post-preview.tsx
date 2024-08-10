@@ -13,6 +13,12 @@ const PostPreview = async ({
 }) => {
   const { success: post, error } = await getPostById(postId);
 
+  await getPostById(postId);
+
+  await getPostById(postId);
+
+  await getPostById(postId);
+
   if (error) {
     return <div>Error: {error}</div>;
   }

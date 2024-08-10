@@ -1,6 +1,6 @@
 import { db } from "@/server";
-import { postBookmarks, postLikes, posts, users } from "@/server/schema";
-import { desc, eq } from "drizzle-orm";
+import { users } from "@/server/schema";
+import { eq } from "drizzle-orm";
 
 export const getUserById = async (userId: string) => {
   try {
