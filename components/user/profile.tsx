@@ -7,20 +7,58 @@ import UserPosts from "./user-posts";
 import UserLikes from "./user-likes";
 import UserBookmarks from "./user-bookmarks";
 import { auth } from "@/server/auth";
-import { getUserByIdWithPosts } from "@/lib/user";
+import { getUserById } from "@/lib/user";
+import { getPostsByUserId } from "@/lib/post";
+import { getLikesByUserId } from "@/lib/like";
+import { getBookmarksByUserId } from "@/lib/bookmark";
 
 const Profile = async ({ userId }: { userId: string }) => {
   const session = await auth();
   const isOwner = userId === session?.user.id;
 
-  const { success: user, error } = await getUserByIdWithPosts(userId);
+  const { success: user, error: userError } = await getUserById(userId);
 
-  if (error) {
-    return <div>Error: {error}</div>;
+  if (userError) {
+    return <div>Error: {userError}</div>;
   }
 
   if (!user) {
     return <div>User not found</div>;
+  }
+
+  const { success: postIds, error: postIdsError } = await getPostsByUserId(
+    userId
+  );
+
+  if (postIdsError) {
+    return <div>Error: {postIdsError}</div>;
+  }
+
+  if (!postIds) {
+    return <div>Posts not found</div>;
+  }
+
+  const { success: userLikes, error: userLikesError } = await getLikesByUserId(
+    userId
+  );
+
+  if (userLikesError) {
+    return <div>Error: {userLikesError}</div>;
+  }
+
+  if (!userLikes) {
+    return <div>Likes not found</div>;
+  }
+
+  const { success: userBookmarks, error: userBookmarksError } =
+    await getBookmarksByUserId(userId);
+
+  if (userBookmarksError) {
+    return <div>Error: {userBookmarksError}</div>;
+  }
+
+  if (!userBookmarks) {
+    return <div>Bookmarks not found</div>;
   }
 
   return (
@@ -46,7 +84,7 @@ const Profile = async ({ userId }: { userId: string }) => {
             </div>
           )}
           <div>
-            <p className="text-center font-medium">{user.posts.length}</p>
+            <p className="text-center font-medium">{postIds.length}</p>
             <p className="text-muted-foreground">posts</p>
           </div>
           <div>
@@ -82,17 +120,19 @@ const Profile = async ({ userId }: { userId: string }) => {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="posts" className="mt-4">
-              <UserPosts posts={user.posts} />
+              <UserPosts postIds={postIds} />
             </TabsContent>
             <TabsContent value="postLikes" className="mt-4">
-              <UserLikes postLikes={user.postLikes} />
+              <UserLikes postLikes={userLikes.map((like) => like.postId)} />
             </TabsContent>
             <TabsContent value="postBookmarks" className="mt-4">
-              <UserBookmarks postBookmarks={user.postBookmarks} />
+              <UserBookmarks
+                postBookmarks={userBookmarks.map((bookmark) => bookmark.postId)}
+              />
             </TabsContent>
           </Tabs>
         ) : (
-          <UserPosts posts={user.posts} />
+          <UserPosts postIds={postIds} />
         )}
       </header>
     </div>

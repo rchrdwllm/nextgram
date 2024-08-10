@@ -1,4 +1,4 @@
-import { getCurrentUserLikes } from "@/lib/like";
+import { getCurrentUserBookmarks } from "@/lib/bookmark";
 import { auth } from "@/server/auth";
 import {
   Card,
@@ -10,36 +10,36 @@ import {
 import PostsGrid from "../post/posts-grid";
 import PostPreview from "../post/post-preview";
 
-const Likes = async () => {
+const Saved = async () => {
   const session = await auth();
 
   if (!session) {
     return <div>You need to be logged in to view this page</div>;
   }
 
-  const { success: postLikes, error } = await getCurrentUserLikes();
+  const { success: postBookmarks, error } = await getCurrentUserBookmarks();
 
   if (error) {
     return <div>Error: {error}</div>;
   }
 
-  if (!postLikes) {
+  if (!postBookmarks) {
     return <div>No liked posts</div>;
   }
 
   return (
     <Card className="border-0 p-0">
       <CardHeader className="p-0">
-        <CardTitle>Liked Posts</CardTitle>
-        <CardDescription>{postLikes?.length} posts</CardDescription>
+        <CardTitle>Saved Posts</CardTitle>
+        <CardDescription>{postBookmarks?.length} posts</CardDescription>
       </CardHeader>
       <CardContent className="p-0 mt-8">
         <PostsGrid>
-          {postLikes.map((postLike) => (
+          {postBookmarks.map((postBookmark) => (
             <PostPreview
-              key={postLike.id}
-              postId={postLike.postId}
-              tab="postLikes"
+              key={postBookmark.id}
+              postId={postBookmark.postId}
+              tab="postBookmarks"
             />
           ))}
         </PostsGrid>
@@ -48,4 +48,4 @@ const Likes = async () => {
   );
 };
 
-export default Likes;
+export default Saved;

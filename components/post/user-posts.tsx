@@ -1,9 +1,7 @@
 import Post from "@/components/post/post";
-import {
-  getPostsByUserId,
-  getPostsByUserLike,
-  getPostsByUserBookmark,
-} from "@/lib/post";
+import { getPostsByUserId } from "@/lib/post";
+import { getLikesByUserId } from "@/lib/like";
+import { getBookmarksByUserId } from "@/lib/bookmark";
 import UserPostsLinkScroller from "./user-posts-link-scroller";
 
 const UserPosts = async ({
@@ -13,26 +11,46 @@ const UserPosts = async ({
   userId: string;
   tab: "postLikes" | "postBookmarks" | "posts";
 }) => {
-  const { success: posts, error } =
-    tab === "posts"
-      ? await getPostsByUserId(userId)
-      : tab === "postLikes"
-      ? await getPostsByUserLike(userId)
-      : await getPostsByUserBookmark(userId);
+  if (tab === "postLikes" || tab === "postBookmarks") {
+    const { success: ids, error } =
+      tab === "postLikes"
+        ? await getLikesByUserId(userId)
+        : await getBookmarksByUserId(userId);
+
+    if (error) {
+      return <div>Error: {error}</div>;
+    }
+
+    if (!ids) {
+      return <div>Posts not found</div>;
+    }
+
+    return (
+      <UserPostsLinkScroller>
+        <div className="flex flex-col gap-4">
+          {ids.map((id) => (
+            <Post key={id.id} postId={id.postId} />
+          ))}
+        </div>
+      </UserPostsLinkScroller>
+    );
+  }
+
+  const { success: postIds, error } = await getPostsByUserId(userId);
 
   if (error) {
     return <div>Error: {error}</div>;
   }
 
-  if (!posts) {
+  if (!postIds) {
     return <div>Posts not found</div>;
   }
 
   return (
     <UserPostsLinkScroller>
       <div className="flex flex-col gap-4">
-        {posts.map((post) => (
-          <Post key={post.id} post={post} />
+        {postIds.map((postId) => (
+          <Post key={postId} postId={postId} />
         ))}
       </div>
     </UserPostsLinkScroller>

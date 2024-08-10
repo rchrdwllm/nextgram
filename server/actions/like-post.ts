@@ -43,5 +43,6 @@ export const likePost = actionClient
     } finally {
       revalidatePath("/feed");
       revalidatePath("/(user)/user/[id]", "page");
+      revalidatePath("/posts");
     }
   });
