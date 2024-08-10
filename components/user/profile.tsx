@@ -7,12 +7,21 @@ import UserPosts from "./user-posts";
 import UserLikes from "./user-likes";
 import UserBookmarks from "./user-bookmarks";
 import { auth } from "@/server/auth";
+import { getUserByIdWithPosts } from "@/lib/user";
 
-const Profile = async ({ user }: { user: UserWithPostsLikesBookmarks }) => {
+const Profile = async ({ userId }: { userId: string }) => {
   const session = await auth();
-  const isOwner = user.id === session?.user.id;
+  const isOwner = userId === session?.user.id;
 
-  console.log(user.image);
+  const { success: user, error } = await getUserByIdWithPosts(userId);
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!user) {
+    return <div>User not found</div>;
+  }
 
   return (
     <div>
