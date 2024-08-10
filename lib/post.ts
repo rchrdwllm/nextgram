@@ -1,5 +1,4 @@
 import { db } from "@/server";
-import { auth } from "@/server/auth";
 import { postBookmarks, postLikes, posts } from "@/server/schema";
 import { and, desc, eq, inArray } from "drizzle-orm";
 
@@ -119,44 +118,6 @@ export const getPostsByUserBookmark = async (userId: string) => {
     }
 
     return { success: bookmarkedPosts };
-  } catch (error) {
-    return { error: "Failed to get posts" };
-  }
-};
-
-export const getCurrentUserLikedPosts = async () => {
-  const session = await auth();
-
-  if (!session) {
-    return { error: "You need to be logged in to view this page" };
-  }
-
-  try {
-    const userPostLikes = await db.query.postLikes.findMany({
-      where: eq(postLikes.userId, session.user.id),
-    });
-
-    if (!userPostLikes) {
-      return { error: "Failed to get posts" };
-    }
-
-    const postIds = userPostLikes.map((postLike) => postLike.postId);
-
-    const likedPosts = await db.query.posts.findMany({
-      where: inArray(posts.id, postIds),
-      with: {
-        postImages: true,
-        postLikes: true,
-        postBookmarks: true,
-        user: true,
-      },
-    });
-
-    if (!likedPosts) {
-      return { error: "Failed to get posts" };
-    }
-
-    return { success: likedPosts };
   } catch (error) {
     return { error: "Failed to get posts" };
   }
