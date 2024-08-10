@@ -8,6 +8,8 @@ export const getImgBlur = async (url: string) => {
 
     const { base64 } = await getPlaiceholder(buffer, { size: 10 });
 
+    console.log(base64);
+
     return { success: base64 };
   } catch (error) {
     return { error: "Failed to get image" };
