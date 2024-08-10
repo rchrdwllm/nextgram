@@ -103,6 +103,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.twoFactorEnabled = token.twoFactorEnabled as boolean;
         session.user.isOAuth = token.isOAuth as boolean;
         session.user.bio = token.bio as string;
+
+        if (token.image) {
+          session.user.image = token.image as string;
+        }
       }
 
       if (session.user.isOAuth) {
