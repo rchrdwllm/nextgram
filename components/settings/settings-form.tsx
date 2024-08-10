@@ -15,7 +15,7 @@ import { settingsSchema } from "@/form_schemas/settings-schema";
 import * as z from "zod";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { Avatar, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { UploadButton } from "../upload-thing/upload-thing";
 import { Switch } from "../ui/switch";
 import { Session } from "next-auth";
@@ -82,7 +82,15 @@ const SettingsForm = ({ session: { user } }: { session: Session }) => {
                 <div className="flex flex-col items-center justify-center gap-4">
                   {form.getValues("image") ? (
                     <Avatar className="h-16 w-16">
-                      <AvatarImage src={form.getValues("image")} />
+                      <AvatarImage
+                        src={form.getValues("image")}
+                        className="object-cover"
+                      />
+                      <AvatarFallback>
+                        <div className="flex items-center justify-center w-16 h-16 bg-muted rounded-full">
+                          <p className="text-xl font-bold">{user.name![0]}</p>
+                        </div>
+                      </AvatarFallback>
                     </Avatar>
                   ) : (
                     <div className="flex items-center justify-center w-16 h-16 bg-muted rounded-full">
