@@ -3,18 +3,22 @@ import { posts } from "@/server/schema";
 import { desc, eq, inArray } from "drizzle-orm";
 
 export const getPostIds = async () => {
-  const result = await db
-    .select({
-      postId: posts.id,
-    })
-    .from(posts)
-    .orderBy(desc(posts.createdAt));
+  //   const result = await db
+  //     .select({
+  //       postId: posts.id,
+  //     })
+  //     .from(posts)
+  //     .orderBy(desc(posts.createdAt));
 
-  if (!result) {
-    return { error: "Failed to fetch posts" };
-  }
+  //   if (!result) {
+  //     return { error: "Failed to fetch posts" };
+  //   }
 
-  const postIds = result.map((post) => post.postId);
+  const result = await db.query.posts.findMany({
+    orderBy: desc(posts.createdAt),
+  });
+
+  const postIds = result.map((post) => post.id);
 
   return { success: postIds };
 };
@@ -39,19 +43,24 @@ export const getPostById = async (postId: string) => {
 
 export const getPostsByUserId = async (userId: string) => {
   try {
-    const result = await db
-      .select({
-        postId: posts.id,
-      })
-      .from(posts)
-      .orderBy(desc(posts.createdAt))
-      .where(eq(posts.userId, userId));
+    // const result = await db
+    //   .select({
+    //     postId: posts.id,
+    //   })
+    //   .from(posts)
+    //   .orderBy(desc(posts.createdAt))
+    //   .where(eq(posts.userId, userId));
+
+    const result = await db.query.posts.findMany({
+      where: eq(posts.userId, userId),
+      orderBy: desc(posts.createdAt),
+    });
 
     if (!result) {
       return { error: "Failed to fetch posts" };
     }
 
-    const postIds = result.map((post) => post.postId);
+    const postIds = result.map((post) => post.id);
 
     return { success: postIds };
   } catch (error) {
