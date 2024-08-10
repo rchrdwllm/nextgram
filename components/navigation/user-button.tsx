@@ -33,7 +33,7 @@ const UserButton = ({ user }: { user: UserType }) => {
       <DropdownMenuTrigger>
         {user.image ? (
           <Avatar className="h-8 w-8">
-            <AvatarImage src={user.image} />
+            <AvatarImage src={user.image} className="object-cover" />
             <AvatarFallback>
               <div className="group flex items-center justify-center w-8 h-8 bg-muted rounded-full transition-colors hover:bg-primary">
                 <p className="text-sm font-medium transition-colors group-hover:text-primary-foreground">
