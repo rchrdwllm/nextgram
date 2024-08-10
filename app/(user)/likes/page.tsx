@@ -1,11 +1,14 @@
 import Likes from "@/components/likes/likes";
 import { Suspense } from "react";
 import LikesLoading from "./loading";
+import FadeWrapper from "@/components/ui/fade-wrapper";
 
 const LikesPage = () => {
   return (
     <Suspense fallback={<LikesLoading />}>
-      <Likes />
+      <FadeWrapper>
+        <Likes />
+      </FadeWrapper>
     </Suspense>
   );
 };

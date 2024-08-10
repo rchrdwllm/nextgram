@@ -1,6 +1,7 @@
 import UserPosts from "@/components/post/user-posts";
 import { Suspense } from "react";
 import UserPostsLoading from "./loading";
+import FadeWrapper from "@/components/ui/fade-wrapper";
 
 const UserPostsPage = async ({
   searchParams: { userId, tab },
@@ -12,7 +13,9 @@ const UserPostsPage = async ({
 }) => {
   return (
     <Suspense fallback={<UserPostsLoading />}>
-      <UserPosts userId={userId} tab={tab} />
+      <FadeWrapper>
+        <UserPosts userId={userId} tab={tab} />
+      </FadeWrapper>
     </Suspense>
   );
 };
