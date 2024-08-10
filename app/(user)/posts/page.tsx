@@ -1,9 +1,6 @@
-import Post from "@/components/post/post";
-import {
-  getPostsByUserId,
-  getPostsByUserLike,
-  getPostsByUserBookmark,
-} from "@/lib/post";
+import UserPosts from "@/components/post/user-posts";
+import { Suspense } from "react";
+import UserPostsLoading from "./loading";
 
 const UserPostsPage = async ({
   searchParams: { userId, tab },
@@ -13,29 +10,10 @@ const UserPostsPage = async ({
     tab: "postLikes" | "postBookmarks" | "posts";
   };
 }) => {
-  const { success: posts, error } =
-    tab === "posts"
-      ? await getPostsByUserId(userId)
-      : tab === "postLikes"
-      ? await getPostsByUserLike(userId)
-      : await getPostsByUserBookmark(userId);
-
-  console.log(tab);
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  if (!posts) {
-    return <div>Posts not found</div>;
-  }
-
   return (
-    <div className="flex flex-col gap-4">
-      {posts.map((post) => (
-        <Post key={post.id} post={post} />
-      ))}
-    </div>
+    <Suspense fallback={<UserPostsLoading />}>
+      <UserPosts userId={userId} tab={tab} />
+    </Suspense>
   );
 };
 
