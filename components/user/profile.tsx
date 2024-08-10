@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarImage } from "../ui/avatar";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { UserWithPostsLikesBookmarks } from "@/lib/infer-type";
@@ -29,14 +29,7 @@ const Profile = async ({ userId }: { userId: string }) => {
         <div className="flex items-center justify-between">
           {user.image ? (
             <Avatar className="h-24 w-24">
-              <AvatarImage src={user.image} className="object-cover" />
-              <AvatarFallback>
-                <div className="flex items-center justify-center w-24 h-24 bg-muted rounded-full">
-                  <p className="text-2xl font-medium transition-colors">
-                    {user.name![0]}
-                  </p>
-                </div>
-              </AvatarFallback>
+              <AvatarImage src={user.image} />
             </Avatar>
           ) : (
             <div className="flex items-center justify-center w-24 h-24 bg-muted rounded-full">

@@ -2,7 +2,7 @@ import { getPostById } from "@/lib/post";
 import Link from "next/link";
 import React from "react";
 import { AspectRatio } from "../ui/aspect-ratio";
-import ImageWithBlur from "./image-with-blur";
+import Image from "next/image";
 
 const PostPreview = async ({
   postId,
@@ -25,7 +25,12 @@ const PostPreview = async ({
     return (
       <Link href={`/posts?userId=${post.userId}&tab=${tab}#${post.id}`}>
         <AspectRatio ratio={1}>
-          <ImageWithBlur url={post.postImages[0].url} />
+          <Image
+            src={post.postImages[0].url}
+            alt={post.postImages[0].name}
+            className="object-cover rounded-sm"
+            fill
+          />
         </AspectRatio>
       </Link>
     );
@@ -34,7 +39,12 @@ const PostPreview = async ({
   return (
     <Link href={`/posts?userId=${post.userId}#${post.id}`}>
       <AspectRatio ratio={1}>
-        <ImageWithBlur url={post.postImages[0].url} />
+        <Image
+          src={post.postImages[0].url}
+          alt={post.postImages[0].name}
+          className="object-cover rounded-sm"
+          fill
+        />
       </AspectRatio>
     </Link>
   );
