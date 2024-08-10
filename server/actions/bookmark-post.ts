@@ -45,6 +45,5 @@ export const bookmarkPost = actionClient
     } finally {
       revalidatePath("/feed");
       revalidatePath("/(user)/user/[id]", "page");
-      revalidatePath("/posts");
     }
   });

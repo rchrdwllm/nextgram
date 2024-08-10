@@ -1,17 +1,15 @@
-import { getPostIds } from "@/lib/post";
+import { getPosts } from "@/lib/post";
 import Post from "./post";
 
 const FeedPosts = async () => {
-  const { success: postIds, error } = await getPostIds();
+  const { success, error } = await getPosts();
 
   if (error) return <div>Error: {error}</div>;
 
-  if (!postIds) return <div>No posts</div>;
-
   return (
     <div className="flex flex-col gap-4">
-      {postIds.map((postId) => (
-        <Post key={postId} postId={postId} />
+      {success?.map((post) => (
+        <Post key={post.id} post={post} />
       ))}
     </div>
   );

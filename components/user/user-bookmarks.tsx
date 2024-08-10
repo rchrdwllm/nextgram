@@ -1,27 +1,20 @@
 import { PostBookmark } from "@/lib/infer-type";
 import PostsGrid from "../post/posts-grid";
 import PostPreview from "../post/post-preview";
-import { getPostsByIds } from "@/lib/post";
 
-const UserBookmarks = async ({
+const UserBookmarks = ({
   postBookmarks,
 }: {
-  postBookmarks: string[];
+  postBookmarks: PostBookmark[];
 }) => {
-  const { success: posts, error } = await getPostsByIds(postBookmarks);
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  if (!posts) {
-    return <div>Posts not found</div>;
-  }
-
   return (
     <PostsGrid>
-      {posts.map((post) => (
-        <PostPreview tab="postBookmarks" key={post.id} postId={post.id} />
+      {postBookmarks.map((postBookmark) => (
+        <PostPreview
+          tab="postBookmarks"
+          key={postBookmark.id}
+          postId={postBookmark.postId}
+        />
       ))}
     </PostsGrid>
   );

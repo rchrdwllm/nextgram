@@ -75,7 +75,7 @@ const UserButton = ({ user }: { user: UserType }) => {
             <span>Likes</span>
           </DropdownMenuItem>
         </Link>
-        <Link href="/saved">
+        <Link href="/bookmarks">
           <DropdownMenuItem className="flex gap-2 cursor-pointer">
             <Bookmark className="w-4 h-4" />
             <span>Saved</span>

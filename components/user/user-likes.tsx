@@ -1,23 +1,16 @@
 import { PostLike } from "@/lib/infer-type";
 import PostsGrid from "../post/posts-grid";
 import PostPreview from "../post/post-preview";
-import { getPostsByIds } from "@/lib/post";
 
-const UserLikes = async ({ postLikes }: { postLikes: string[] }) => {
-  const { success: posts, error } = await getPostsByIds(postLikes);
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  if (!posts) {
-    return <div>Posts not found</div>;
-  }
-
+const UserLikes = ({ postLikes }: { postLikes: PostLike[] }) => {
   return (
     <PostsGrid>
-      {posts.map((post) => (
-        <PostPreview tab="postLikes" key={post.id} postId={post.id} />
+      {postLikes.map((postLike) => (
+        <PostPreview
+          tab="postLikes"
+          key={postLike.id}
+          postId={postLike.postId}
+        />
       ))}
     </PostsGrid>
   );
