@@ -17,8 +17,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import CreateForm from "../create/create-form";
 import { PostWithDetails } from "@/lib/infer-type";
+import DeletePostButton from "./delete-post-button";
 
 const MoreActions = ({ post }: { post: PostWithDetails }) => {
   const [isMounted, setIsMounted] = useState(false);
@@ -31,41 +43,60 @@ const MoreActions = ({ post }: { post: PostWithDetails }) => {
   if (!isMounted) return null;
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            className="px-3 text-muted-foreground hover:text-primary"
-          >
-            <EllipsisVertical className="w-4 h-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DialogTrigger asChild>
-            <DropdownMenuItem className="flex gap-2 cursor-pointer">
-              <SquarePen className="w-4 h-4" />
-              <span>Edit</span>
-            </DropdownMenuItem>
-          </DialogTrigger>
-          <DropdownMenuItem className="flex gap-2 cursor-pointer group hover:bg-destructive">
-            <Trash2 className="w-4 h-4 transition-colors group-hover:text-destructive-foreground" />
-            <span className="transition-colors group-hover:text-destructive-foreground">
-              Delete
-            </span>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Create a post</DialogTitle>
-          <DialogDescription>
-            Create a post to share your thoughts, ideas, or interesting links.
-          </DialogDescription>
-        </DialogHeader>
-        <CreateForm post={post} onOpenChange={setOpen} />
-      </DialogContent>
-    </Dialog>
+    <AlertDialog>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="px-3 text-muted-foreground hover:text-primary"
+            >
+              <EllipsisVertical className="w-4 h-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DialogTrigger asChild>
+              <DropdownMenuItem className="flex gap-2 cursor-pointer">
+                <SquarePen className="w-4 h-4" />
+                <span>Edit</span>
+              </DropdownMenuItem>
+            </DialogTrigger>
+            <AlertDialogTrigger asChild>
+              <DropdownMenuItem className="flex gap-2 cursor-pointer group hover:bg-destructive">
+                <Trash2 className="w-4 h-4 transition-colors group-hover:text-destructive-foreground" />
+                <span className="transition-colors group-hover:text-destructive-foreground">
+                  Delete
+                </span>
+              </DropdownMenuItem>
+            </AlertDialogTrigger>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit post</DialogTitle>
+            <DialogDescription>Edit the details of this post</DialogDescription>
+          </DialogHeader>
+          <CreateForm post={post} onOpenChange={setOpen} />
+        </DialogContent>
+      </Dialog>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>
+            Are you sure you want to delete this post?
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone. This will permanently delete this post
+            and remove its data from our servers.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction asChild>
+            <DeletePostButton postId={post.id} />
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 
