@@ -62,6 +62,8 @@ const CreateForm = ({
   });
 
   const handleSubmit = (values: z.infer<typeof createSchema>) => {
+    console.log(values);
+
     execute(values);
   };
 
@@ -103,36 +105,36 @@ const CreateForm = ({
             render={() => (
               <FormItem>
                 <FormControl className="flex flex-col gap-4 items-center justify-center">
-                  {imgUrls.length ? (
-                    <UploadButton
-                      endpoint="postImageUploader"
-                      appearance={{
-                        button:
-                          "bg-secondary px-6 text-sm transition-colors hover:bg-secondary/80",
-                      }}
-                      onBeforeUploadBegin={(imgs) => {
-                        setImgUrls(imgs.map((img) => URL.createObjectURL(img)));
+                  <UploadButton
+                    endpoint="postImageUploader"
+                    appearance={{
+                      button:
+                        "bg-secondary px-6 text-sm transition-colors hover:bg-secondary/80",
+                    }}
+                    onBeforeUploadBegin={(imgs) => {
+                      form.resetField("images");
 
-                        return imgs;
-                      }}
-                      onUploadBegin={() => {
-                        setIsUploading(true);
-                      }}
-                      onClientUploadComplete={(imgs) => {
-                        imgs.forEach((img) => {
-                          append({
-                            url: img.url,
-                            key: img.key,
-                            name: img.name,
-                            size: img.size,
-                          });
+                      setImgUrls(imgs.map((img) => URL.createObjectURL(img)));
+
+                      return imgs;
+                    }}
+                    onUploadBegin={() => {
+                      setIsUploading(true);
+                    }}
+                    onClientUploadComplete={(imgs) => {
+                      imgs.forEach((img) => {
+                        append({
+                          url: img.url,
+                          key: img.key,
+                          name: img.name,
+                          size: img.size,
                         });
+                      });
 
-                        setIsUploading(false);
-                      }}
-                      disabled={isUploading}
-                    />
-                  ) : null}
+                      setIsUploading(false);
+                    }}
+                    disabled={isUploading}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
