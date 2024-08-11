@@ -10,6 +10,10 @@ import { getUserById } from "@/lib/user";
 import { getUserPostIds } from "@/lib/post";
 import { getUserLikes } from "@/lib/like";
 import { getUserBookmarks } from "@/lib/bookmark";
+import FollowButton from "./follow-button";
+import { getUserFollowerIds, getUserFollowingIds } from "@/lib/follow";
+import FollowingButton from "./following-button";
+import FollowersButton from "./followers-button";
 
 const Profile = async ({ userId }: { userId: string }) => {
   const session = await auth();
@@ -63,6 +67,29 @@ const Profile = async ({ userId }: { userId: string }) => {
 
   const userBookmarkIds = userBookmarks.map((bookmark) => bookmark.postId);
 
+  const { success: userFollowerIds, error: userFollowerIdsError } =
+    await getUserFollowerIds(userId);
+  const { success: userFollowingIds, error: userFollowingIdsError } =
+    await getUserFollowingIds(userId);
+
+  if (userFollowerIdsError) {
+    return <div>Error: {userFollowerIdsError}</div>;
+  }
+
+  if (!userFollowerIds) {
+    return <div>User follower ids not found</div>;
+  }
+
+  if (userFollowingIdsError) {
+    return <div>Error: {userFollowingIdsError}</div>;
+  }
+
+  if (!userFollowingIds) {
+    return <div>User following ids not found</div>;
+  }
+
+  const isFollowing = userFollowerIds.includes(session?.user.id!);
+
   return (
     <div>
       <header className="flex flex-col gap-4">
@@ -89,25 +116,27 @@ const Profile = async ({ userId }: { userId: string }) => {
             <p className="text-center font-medium">{userPostIds.length}</p>
             <p className="text-muted-foreground">posts</p>
           </div>
-          <div>
-            <p className="text-center font-medium">16</p>
-            <p className="text-muted-foreground">followers</p>
-          </div>
-          <div>
-            <p className="text-center font-medium">16</p>
-            <p className="text-muted-foreground">following</p>
-          </div>
+          <FollowersButton userFollowerIds={userFollowerIds} />
+          <FollowingButton userFollowingIds={userFollowingIds} />
         </div>
         <div>
           <p className="font-medium">{user.name}</p>
           <p className="text-muted-foreground">{user.email}</p>
           {user.bio && <p className="mt-2">{user.bio}</p>}
         </div>
-        <Link href="/settings">
-          <Button variant="secondary" className="w-full">
-            Edit profile
-          </Button>
-        </Link>
+        {isOwner ? (
+          <Link href="/settings">
+            <Button variant="secondary" className="w-full">
+              Edit profile
+            </Button>
+          </Link>
+        ) : (
+          <FollowButton
+            followerId={session?.user.id!}
+            followingId={userId}
+            isDefaultFollowing={isFollowing}
+          />
+        )}
         {isOwner ? (
           <Tabs defaultValue="posts" className="w-full">
             <TabsList className="w-full">
