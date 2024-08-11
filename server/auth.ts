@@ -115,5 +115,26 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return session;
     },
+    signIn: async ({ account, profile }) => {
+      if (account && profile) {
+        if (account.provider === "google") {
+          const existingUser = await db.query.users.findFirst({
+            where: eq(users.email, profile.email!),
+          });
+
+          const existingAccount = await db.query.accounts.findFirst({
+            where: eq(accounts.providerAccountId, account.providerAccountId),
+          });
+
+          if (existingUser && !existingAccount) {
+            throw new Error(
+              `You used a Google account to sign in. However, a Nextgram account already exists for ${profile.email}. Please sign in with email and password instead.`
+            );
+          }
+        }
+      }
+
+      return true;
+    },
   },
 });
