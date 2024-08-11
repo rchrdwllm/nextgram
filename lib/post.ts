@@ -1,6 +1,6 @@
 import { db } from "@/server";
-import { follows, posts } from "@/server/schema";
-import { desc, eq, inArray } from "drizzle-orm";
+import { follows, lower, posts } from "@/server/schema";
+import { desc, eq, inArray, like } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 
 export const getPostIds = async () => {
@@ -141,6 +141,28 @@ export const getPostsByFollowing = async (userId: string) => {
     }
 
     const postIds = postIdsResult.map((postId) => postId.postId);
+
+    return { success: postIds };
+  } catch (error) {
+    return { error: "Failed to get posts" };
+  }
+};
+
+export const getPostsByQuery = async (q: string) => {
+  try {
+    const postIdsResult = await db
+      .select({
+        postId: posts.id,
+      })
+      .from(posts)
+      .where(like(lower(posts.caption), "%" + q + "%"))
+      .orderBy(desc(posts.createdAt));
+
+    if (!postIdsResult) {
+      return { error: "Failed to fetch post IDs" };
+    }
+
+    const postIds = postIdsResult.map((post) => post.postId);
 
     return { success: postIds };
   } catch (error) {

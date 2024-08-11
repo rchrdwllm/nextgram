@@ -3,7 +3,7 @@
 import { useAction } from "next-safe-action/hooks";
 import { Button } from "../ui/button";
 import { follow } from "@/server/actions/follow";
-import { startTransition, useEffect, useOptimistic, useState } from "react";
+import { startTransition, useOptimistic, useState } from "react";
 
 type FollowButtonProps = {
   followerId: string;

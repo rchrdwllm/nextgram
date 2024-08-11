@@ -1,5 +1,6 @@
-import { relations } from "drizzle-orm";
+import { relations, sql, SQL } from "drizzle-orm";
 import {
+  AnyPgColumn,
   boolean,
   integer,
   pgTable,
@@ -182,3 +183,7 @@ export const followsRelations = relations(follows, ({ one }) => ({
     relationName: "followings",
   }),
 }));
+
+export function lower(col: AnyPgColumn): any {
+  return sql`lower(${col})`;
+}
