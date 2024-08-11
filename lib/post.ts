@@ -39,8 +39,6 @@ export const getPostById = unstable_cache(async (postId: string) => {
       return { error: "Post not found" };
     }
 
-    console.log(post.id);
-
     return { success: post };
   } catch (error) {
     return { error: "Failed to get post" };
