@@ -3,6 +3,7 @@ import Link from "next/link";
 import React from "react";
 import { AspectRatio } from "../ui/aspect-ratio";
 import Image from "next/image";
+import { auth } from "@/server/auth";
 
 const PostPreview = async ({
   postId,
@@ -12,12 +13,9 @@ const PostPreview = async ({
   tab?: "postLikes" | "postBookmarks" | "posts";
 }) => {
   const { success: post, error } = await getPostById(postId);
+  const session = await auth();
 
-  await getPostById(postId);
-
-  await getPostById(postId);
-
-  await getPostById(postId);
+  if (!session) return null;
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -29,7 +27,7 @@ const PostPreview = async ({
 
   if (tab) {
     return (
-      <Link href={`/posts?userId=${post.userId}&tab=${tab}#${post.id}`}>
+      <Link href={`/posts?userId=${session.user.id}&tab=${tab}#${post.id}`}>
         <AspectRatio ratio={1}>
           <Image
             src={post.postImages[0].url}

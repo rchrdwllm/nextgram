@@ -41,7 +41,7 @@ const Profile = async ({ userId }: { userId: string }) => {
   }
 
   const { success: userLikes, error: userLikesError } = await getUserLikes(
-    userId
+    session?.user.id!
   );
 
   if (userLikesError) {
@@ -55,7 +55,7 @@ const Profile = async ({ userId }: { userId: string }) => {
   const userLikeIds = userLikes.map((like) => like.postId);
 
   const { success: userBookmarks, error: userBookmarksError } =
-    await getUserBookmarks(userId);
+    await getUserBookmarks(session?.user.id!);
 
   if (userBookmarksError) {
     return <div>Error: {userBookmarksError}</div>;
