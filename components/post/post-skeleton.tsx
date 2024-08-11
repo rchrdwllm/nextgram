@@ -21,6 +21,7 @@ const PostSkeleton = () => {
         <Skeleton className="w-20 h-4" />
         <Skeleton className="w-full h-4" />
         <Skeleton className="w-full h-4" />
+        <Skeleton className="w-1/3 h-4" />
       </CardContent>
     </Card>
   );

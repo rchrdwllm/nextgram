@@ -85,6 +85,13 @@ const Post = async ({ postId }: { postId: string }) => {
               {post.caption}
             </p>
           )}
+          <span className="text-muted-foreground text-sm">
+            {new Date(post.createdAt!).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </span>
         </CardContent>
       </Card>
     </div>
