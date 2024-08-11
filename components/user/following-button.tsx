@@ -25,10 +25,8 @@ const FollowingButton = ({
         <DialogHeader>
           <DialogTitle>Following</DialogTitle>
         </DialogHeader>
-        <DialogDescription>
-          You are following {userFollowingIds.length} people
-        </DialogDescription>
-        <div className="flex flex-col gap-4 mt-4">
+        <DialogDescription></DialogDescription>
+        <div className="flex flex-col gap-4">
           {userFollowingIds.map((followingId) => (
             <ProfileCard key={followingId} userId={followingId} />
           ))}

@@ -6,6 +6,7 @@ import { db } from "..";
 import { and, eq } from "drizzle-orm";
 import { follows } from "../schema";
 import { auth } from "../auth";
+import { revalidatePath } from "next/cache";
 
 export const follow = actionClient
   .schema(followSchema)
@@ -39,5 +40,7 @@ export const follow = actionClient
       return { success: "Followed user" };
     } catch (error) {
       return { error: "Error following/unfollowing" };
+    } finally {
+      revalidatePath("/(user)/user/[id]", "page");
     }
   });
