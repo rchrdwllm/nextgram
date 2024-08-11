@@ -38,7 +38,7 @@ const CreateForm = ({
     },
   });
   const [imgUrls, setImgUrls] = useState<string[]>([]);
-  const { append } = useFieldArray({
+  const { append, remove } = useFieldArray({
     control: form.control,
     name: "images",
   });
@@ -62,9 +62,13 @@ const CreateForm = ({
   });
 
   const handleSubmit = (values: z.infer<typeof createSchema>) => {
-    console.log(values);
-
     execute(values);
+  };
+
+  const handleClientImageDelete = async (index: number) => {
+    remove(index);
+
+    setImgUrls(imgUrls.filter((_, i) => i !== index));
   };
 
   useEffect(() => {
@@ -89,8 +93,12 @@ const CreateForm = ({
   return (
     <>
       <div className="w-full flex justify-center">
-        {imgUrls.length > 0 ? (
-          <ImageCarousel images={imgUrls} />
+        {imgUrls.length > 0 && form.getValues("images") ? (
+          <ImageCarousel
+            handleClientImageDelete={handleClientImageDelete}
+            imgUrls={imgUrls}
+            images={form.getValues("images")}
+          />
         ) : (
           <Images className="h-32 w-32 text-muted" />
         )}
@@ -112,9 +120,18 @@ const CreateForm = ({
                         "bg-secondary px-6 text-sm transition-colors hover:bg-secondary/80",
                     }}
                     onBeforeUploadBegin={(imgs) => {
-                      form.resetField("images");
+                      if (post) {
+                        form.resetField("images");
 
-                      setImgUrls(imgs.map((img) => URL.createObjectURL(img)));
+                        setImgUrls(imgs.map((img) => URL.createObjectURL(img)));
+
+                        return imgs;
+                      }
+
+                      setImgUrls([
+                        ...imgUrls,
+                        ...imgs.map((img) => URL.createObjectURL(img)),
+                      ]);
 
                       return imgs;
                     }}
