@@ -29,7 +29,11 @@ const Saved = async () => {
       <CardContent className="p-0">
         <PostsGrid>
           {bookmarks.map((bookmark) => (
-            <PostPreview key={bookmark.id} postId={bookmark.postId} />
+            <PostPreview
+              tab="postBookmarks"
+              key={bookmark.id}
+              postId={bookmark.postId}
+            />
           ))}
         </PostsGrid>
       </CardContent>

@@ -29,7 +29,7 @@ const Likes = async () => {
       <CardContent className="p-0">
         <PostsGrid>
           {likes.map((like) => (
-            <PostPreview key={like.id} postId={like.postId} />
+            <PostPreview tab="postLikes" key={like.id} postId={like.postId} />
           ))}
         </PostsGrid>
       </CardContent>
