@@ -8,7 +8,7 @@ const SearchPage = async ({
 }: {
   searchParams: { q: string };
 }) => {
-  const query = searchParams.q;
+  const query = searchParams.q ?? "";
 
   return (
     <div className="flex flex-col gap-4">
