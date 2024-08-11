@@ -14,4 +14,5 @@ export const createSchema = z.object({
     .nonempty({
       message: "You must upload at least one image",
     }),
+  postId: z.optional(z.string()),
 });

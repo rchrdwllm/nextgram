@@ -14,23 +14,27 @@ import { createSchema } from "@/form_schemas/create-schema";
 import * as z from "zod";
 import ImageCarousel from "./image-carousel";
 import { Button } from "../ui/button";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { useAction } from "next-safe-action/hooks";
 import { createPost } from "@/server/actions/create-post";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { PostWithDetails } from "@/lib/infer-type";
 
 const CreateForm = ({
   onOpenChange,
+  post,
 }: {
   onOpenChange: Dispatch<SetStateAction<boolean>>;
+  post?: PostWithDetails;
 }) => {
   const form = useForm<z.infer<typeof createSchema>>({
     resolver: zodResolver(createSchema),
     defaultValues: {
       caption: "",
       images: [],
+      postId: post ? post.id : undefined,
     },
   });
   const [imgUrls, setImgUrls] = useState<string[]>([]);
@@ -41,12 +45,12 @@ const CreateForm = ({
   const [isUploading, setIsUploading] = useState(false);
   const { execute, status } = useAction(createPost, {
     onExecute: () => {
-      toast.loading("Creating post...");
+      toast.loading(post ? "Updating post..." : "Creating post...");
     },
     onSuccess: ({ data }) => {
       if (data?.success) {
         toast.dismiss();
-        toast.success("Post created successfully");
+        toast.success(data?.success);
         onOpenChange(false);
       }
 
@@ -60,6 +64,25 @@ const CreateForm = ({
   const handleSubmit = (values: z.infer<typeof createSchema>) => {
     execute(values);
   };
+
+  useEffect(() => {
+    if (post) {
+      form.setValue("caption", post.caption ?? "");
+
+      if (!imgUrls.length) {
+        post.postImages.forEach((img) => {
+          imgUrls.push(img.url);
+
+          append({
+            url: img.url,
+            key: img.key,
+            name: img.name,
+            size: img.size,
+          });
+        });
+      }
+    }
+  }, []);
 
   return (
     <>
@@ -80,34 +103,36 @@ const CreateForm = ({
             render={() => (
               <FormItem>
                 <FormControl className="flex flex-col gap-4 items-center justify-center">
-                  <UploadButton
-                    endpoint="postImageUploader"
-                    appearance={{
-                      button:
-                        "bg-secondary px-6 text-sm transition-colors hover:bg-secondary/80",
-                    }}
-                    onBeforeUploadBegin={(imgs) => {
-                      setImgUrls(imgs.map((img) => URL.createObjectURL(img)));
+                  {imgUrls.length ? (
+                    <UploadButton
+                      endpoint="postImageUploader"
+                      appearance={{
+                        button:
+                          "bg-secondary px-6 text-sm transition-colors hover:bg-secondary/80",
+                      }}
+                      onBeforeUploadBegin={(imgs) => {
+                        setImgUrls(imgs.map((img) => URL.createObjectURL(img)));
 
-                      return imgs;
-                    }}
-                    onUploadBegin={() => {
-                      setIsUploading(true);
-                    }}
-                    onClientUploadComplete={(imgs) => {
-                      imgs.forEach((img) => {
-                        append({
-                          url: img.url,
-                          key: img.key,
-                          name: img.name,
-                          size: img.size,
+                        return imgs;
+                      }}
+                      onUploadBegin={() => {
+                        setIsUploading(true);
+                      }}
+                      onClientUploadComplete={(imgs) => {
+                        imgs.forEach((img) => {
+                          append({
+                            url: img.url,
+                            key: img.key,
+                            name: img.name,
+                            size: img.size,
+                          });
                         });
-                      });
 
-                      setIsUploading(false);
-                    }}
-                    disabled={isUploading}
-                  />
+                        setIsUploading(false);
+                      }}
+                      disabled={isUploading}
+                    />
+                  ) : null}
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -148,7 +173,7 @@ const CreateForm = ({
                 status === "executing" && "animate-pulse pointer-events-none"
               )}
             >
-              Post
+              {post ? "Save" : "Post"}
             </Button>
           </div>
         </form>

@@ -6,7 +6,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -50,7 +49,7 @@ const UserButton = ({ user }: { user: UserType }) => {
           </div>
         )}
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="p-4 min-w-[250px]">
+      <DropdownMenuContent align="end" className="p-4 min-w-[250px]">
         <div className="group flex flex-col gap-2 items-center justify-center rounded-md w-full py-6 bg-muted">
           {user.image ? (
             <Avatar className="h-8 w-8">

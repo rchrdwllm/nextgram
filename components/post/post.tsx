@@ -7,6 +7,8 @@ import { getPostLikeByIdAndUserId } from "@/lib/like";
 import { getBookmarkByIdAndUserId } from "@/lib/bookmark";
 import { getPostById } from "@/lib/post";
 import { getUserById } from "@/lib/user";
+import Link from "next/link";
+import MoreActions from "./more-actions";
 
 const Post = async ({ postId }: { postId: string }) => {
   const session = await auth();
@@ -36,31 +38,39 @@ const Post = async ({ postId }: { postId: string }) => {
   );
   const isBookmarked = bookmarkedPost ? true : false;
 
+  const isOwner = post.userId === session.user.id;
+
   return (
-    <a id={post.id}>
+    <div id={post.id}>
       <Card>
-        <CardHeader className="flex flex-row gap-4 space-y-0 items-center">
-          {postUser.image ? (
-            <Avatar className="h-8 w-8">
-              <AvatarImage src={postUser.image} className="object-cover" />
-              <AvatarFallback>
-                <div className="group flex items-center justify-center w-8 h-8 bg-muted rounded-full transition-colors hover:bg-primary">
-                  <p className="text-sm font-medium transition-colors group-hover:text-primary-foreground">
-                    {postUser.name![0]}
-                  </p>
-                </div>
-              </AvatarFallback>
-            </Avatar>
-          ) : (
-            <div className="group flex items-center justify-center w-8 h-8 bg-muted rounded-full transition-colors hover:bg-primary">
-              <p className="text-sm font-medium transition-colors group-hover:text-primary-foreground">
-                {postUser.name![0]}
-              </p>
-            </div>
-          )}
-          <h1 className="text-sm space-y-0 mt-0 font-medium">
-            {postUser.name}
-          </h1>
+        <CardHeader className="flex flex-row justify-between items-center space-y-0">
+          <Link
+            className="flex flex-row gap-4 space-y-0 items-center"
+            href={`/user/${post.userId}`}
+          >
+            {postUser.image ? (
+              <Avatar className="h-8 w-8">
+                <AvatarImage src={postUser.image} className="object-cover" />
+                <AvatarFallback>
+                  <div className="group flex items-center justify-center w-8 h-8 bg-muted rounded-full transition-colors hover:bg-primary">
+                    <p className="text-sm font-medium transition-colors group-hover:text-primary-foreground">
+                      {postUser.name![0]}
+                    </p>
+                  </div>
+                </AvatarFallback>
+              </Avatar>
+            ) : (
+              <div className="group flex items-center justify-center w-8 h-8 bg-muted rounded-full transition-colors hover:bg-primary">
+                <p className="text-sm font-medium transition-colors group-hover:text-primary-foreground">
+                  {postUser.name![0]}
+                </p>
+              </div>
+            )}
+            <h1 className="text-sm space-y-0 mt-0 font-medium">
+              {postUser.name}
+            </h1>
+          </Link>
+          {isOwner && <MoreActions post={post} />}
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <PostImagesCarousel postImages={post.postImages} />
@@ -77,7 +87,7 @@ const Post = async ({ postId }: { postId: string }) => {
           )}
         </CardContent>
       </Card>
-    </a>
+    </div>
   );
 };
 

@@ -6,11 +6,12 @@ import { db } from "..";
 import { postImages, posts } from "../schema";
 import { revalidatePath } from "next/cache";
 import { auth } from "../auth";
+import { eq } from "drizzle-orm";
 
 export const createPost = actionClient
   .schema(createSchema)
   .action(async ({ parsedInput }) => {
-    const { caption, images } = parsedInput;
+    const { caption, images, postId } = parsedInput;
     const session = await auth();
 
     if (!session) {
@@ -19,6 +20,25 @@ export const createPost = actionClient
 
     if (!parsedInput.images.length) {
       return { error: "You must upload at least one image" };
+    }
+
+    if (postId) {
+      try {
+        await db
+          .update(posts)
+          .set({
+            caption,
+          })
+          .where(eq(posts.id, postId));
+
+        return { success: "Post updated" };
+      } catch (error) {
+        return { error: "Failed to update post" };
+      } finally {
+        revalidatePath("/feed");
+        revalidatePath("/(user)/user/[id]", "page");
+        revalidatePath("/posts");
+      }
     }
 
     try {
@@ -47,5 +67,6 @@ export const createPost = actionClient
     } finally {
       revalidatePath("/feed");
       revalidatePath("/(user)/user/[id]", "page");
+      revalidatePath("/posts");
     }
   });
