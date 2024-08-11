@@ -10,6 +10,10 @@ import { getUserById } from "@/lib/user";
 import Link from "next/link";
 import MoreActions from "./more-actions";
 
+type PostProps = {
+  postId: string;
+};
+
 const Post = async ({ postId }: { postId: string }) => {
   const session = await auth();
 

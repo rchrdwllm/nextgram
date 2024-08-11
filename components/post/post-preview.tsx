@@ -4,14 +4,15 @@ import React from "react";
 import { AspectRatio } from "../ui/aspect-ratio";
 import Image from "next/image";
 import { auth } from "@/server/auth";
+import PostDialog from "./post-dialog";
 
-const PostPreview = async ({
-  postId,
-  tab,
-}: {
+type PostPreviewProps = {
   postId: string;
   tab?: "postLikes" | "postBookmarks" | "posts";
-}) => {
+  fromSearch?: boolean;
+};
+
+const PostPreview = async ({ postId, tab, fromSearch }: PostPreviewProps) => {
   const { success: post, error } = await getPostById(postId);
   const session = await auth();
 
@@ -25,23 +26,16 @@ const PostPreview = async ({
     return <div>Post not found</div>;
   }
 
-  if (tab) {
-    return (
-      <Link href={`/posts?userId=${session.user.id}&tab=${tab}#${post.id}`}>
-        <AspectRatio ratio={1}>
-          <Image
-            src={post.postImages[0].url}
-            alt={post.postImages[0].name}
-            className="object-cover rounded-sm"
-            fill
-          />
-        </AspectRatio>
-      </Link>
-    );
+  if (fromSearch) {
+    return <PostDialog post={post} />;
   }
 
+  const href = tab
+    ? `/posts?userId=${session.user.id}&tab=${tab}#${post.id}`
+    : `/posts?userId=${post.userId}#${post.id}`;
+
   return (
-    <Link href={`/posts?userId=${post.userId}#${post.id}`}>
+    <Link href={href}>
       <AspectRatio ratio={1}>
         <Image
           src={post.postImages[0].url}

@@ -17,7 +17,7 @@ const SearchPosts = async ({ query }: { query: string }) => {
   return (
     <PostsGrid>
       {searchPosts.map((postId) => (
-        <PostPreview key={postId} postId={postId} />
+        <PostPreview fromSearch key={postId} postId={postId} />
       ))}
     </PostsGrid>
   );
