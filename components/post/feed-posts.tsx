@@ -1,6 +1,8 @@
-import { getPostsByFollowing } from "@/lib/post";
+import { getPostsByFollowing, getUserPostIds } from "@/lib/post";
 import Post from "./post";
 import { auth } from "@/server/auth";
+import { getUserFollowingIds } from "@/lib/follow";
+import SuggestedAccounts from "../feed/suggested-accounts";
 
 const FeedPosts = async () => {
   const session = await auth();
@@ -9,11 +11,32 @@ const FeedPosts = async () => {
     return <div>You must be logged in to view this page</div>;
   }
 
-  const { success: postIds, error } = await getPostsByFollowing(
+  const { success: followingIds, error: followingError } =
+    await getUserFollowingIds(session.user.id);
+
+  if (followingError) {
+    return <div>Error: {followingError}</div>;
+  }
+
+  const { success: userPosts, error: userPostsError } = await getUserPostIds(
     session.user.id
   );
 
-  if (error) return <div>Error: {error}</div>;
+  if (userPostsError) {
+    return <div>Error: {userPostsError}</div>;
+  }
+
+  if (userPosts && followingIds) {
+    if (!userPosts.length && !followingIds.length) {
+      return <SuggestedAccounts />;
+    }
+  }
+
+  const { success: postIds, error: postError } = await getPostsByFollowing(
+    session.user.id
+  );
+
+  if (postError) return <div>Error: {postError}</div>;
 
   if (!postIds) return <div>No posts</div>;
 

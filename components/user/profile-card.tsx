@@ -33,11 +33,8 @@ const ProfileCard = async ({ userId }: { userId: string }) => {
   const isFollowing = userFollowerIds.includes(session?.user.id!);
 
   return (
-    <Link
-      href={`/user/${userId}`}
-      className="flex justify-between items-center"
-    >
-      <div className="flex items-center gap-2">
+    <div className="flex justify-between items-center">
+      <Link href={`/user/${userId}`} className="flex items-center gap-2">
         {user.image ? (
           <Avatar className="h-12 w-12">
             <AvatarImage src={user.image} className="object-cover" />
@@ -56,7 +53,7 @@ const ProfileCard = async ({ userId }: { userId: string }) => {
           <p className="text-sm font-medium">{user.name}</p>
           <p className="text-xs text-muted-foreground">{user.email}</p>
         </div>
-      </div>
+      </Link>
       {userId !== session.user.id && (
         <FollowButton
           followerId={session.user.id}
@@ -64,7 +61,7 @@ const ProfileCard = async ({ userId }: { userId: string }) => {
           isDefaultFollowing={isFollowing}
         />
       )}
-    </Link>
+    </div>
   );
 };
 

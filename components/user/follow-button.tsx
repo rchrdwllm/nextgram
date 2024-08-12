@@ -23,7 +23,7 @@ const FollowButton = ({
     (_, newState: boolean) => newState
   );
 
-  const handleFollow = () => {
+  const handleFollow = (e: any) => {
     startTransition(() => {
       setIsFollowingOptimistic(!isFollowingOptimistic);
       setIsFollowing(!isFollowing);
