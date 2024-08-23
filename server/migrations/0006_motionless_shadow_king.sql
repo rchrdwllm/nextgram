@@ -1,1 +1,0 @@
-ALTER TABLE "twoFactorToken" ALTER COLUMN "password" DROP NOT NULL;
