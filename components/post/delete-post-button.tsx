@@ -4,7 +4,15 @@ import { deletePost } from "@/server/actions/delete-post";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
-const DeletePostButton = ({ postId }: { postId: string }) => {
+type DeletePostButtonProps = {
+  postId: string;
+  setIsAlertDialogOpen: (isAlertDialogOpen: boolean) => void;
+};
+
+const DeletePostButton = ({
+  postId,
+  setIsAlertDialogOpen,
+}: DeletePostButtonProps) => {
   const { execute, status } = useAction(deletePost, {
     onExecute: () => {
       toast.loading("Deleting post...");
@@ -19,6 +27,8 @@ const DeletePostButton = ({ postId }: { postId: string }) => {
         toast.dismiss();
         toast.error(data.error);
       }
+
+      setIsAlertDialogOpen(false);
     },
   });
 

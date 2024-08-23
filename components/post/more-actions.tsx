@@ -34,7 +34,8 @@ import DeletePostButton from "./delete-post-button";
 
 const MoreActions = ({ post }: { post: PostWithDetails }) => {
   const [isMounted, setIsMounted] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
@@ -43,8 +44,8 @@ const MoreActions = ({ post }: { post: PostWithDetails }) => {
   if (!isMounted) return null;
 
   return (
-    <AlertDialog>
-      <Dialog open={open} onOpenChange={setOpen}>
+    <AlertDialog open={isAlertDialogOpen} onOpenChange={setIsAlertDialogOpen}>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -76,7 +77,7 @@ const MoreActions = ({ post }: { post: PostWithDetails }) => {
             <DialogTitle>Edit post</DialogTitle>
             <DialogDescription>Edit the details of this post</DialogDescription>
           </DialogHeader>
-          <CreateForm post={post} onOpenChange={setOpen} />
+          <CreateForm post={post} onOpenChange={setIsDialogOpen} />
         </DialogContent>
       </Dialog>
       <AlertDialogContent>
@@ -92,7 +93,10 @@ const MoreActions = ({ post }: { post: PostWithDetails }) => {
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction asChild>
-            <DeletePostButton postId={post.id} />
+            <DeletePostButton
+              setIsAlertDialogOpen={setIsAlertDialogOpen}
+              postId={post.id}
+            />
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
