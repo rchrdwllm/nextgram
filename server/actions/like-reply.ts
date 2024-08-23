@@ -6,6 +6,7 @@ import { auth } from "../auth";
 import { db } from "..";
 import { postReplyLikes } from "../schema";
 import { and, eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 export const likeReply = actionClient
   .schema(replyLikeSchema)
@@ -50,7 +51,9 @@ export const likeReply = actionClient
 
       return { success: replyLike };
     } catch (error) {
-      console.error(error);
       return { error: "Something went wrong" };
+    } finally {
+      revalidatePath("/feed");
+      revalidatePath("/(user)/user/[id]", "page");
     }
   });
