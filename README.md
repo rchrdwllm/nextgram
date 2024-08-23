@@ -1,4 +1,8 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Nextgram - Instagram Clone (WIP)
+
+This is a WIP [Next.js](https://nextjs.org/) project that I'm working on to learn Next.js and TypeScript. It's a clone of Instagram, with its basic functionalities.
+
+There are still a lot of missing stuff that I want to work on. For now, this only looks best on screens small screens as I prioritized working on the mobile experience first.
 
 ## Getting Started
 
@@ -15,10 +19,6 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
 ## Learn More
 
