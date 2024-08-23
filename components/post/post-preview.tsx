@@ -31,7 +31,7 @@ const PostPreview = async ({ postId, tab, fromSearch }: PostPreviewProps) => {
   }
 
   const href = tab
-    ? `/posts?userId=${session.user.id}&tab=${tab}#${post.id}`
+    ? `/posts?userId=${post.userId}&tab=${tab}#${post.id}`
     : `/posts?userId=${post.userId}#${post.id}`;
 
   return (
