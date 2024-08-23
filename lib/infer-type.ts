@@ -45,3 +45,12 @@ export type PostImage = InferResultType<"postImages">;
 export type PostLike = InferResultType<"postLikes">;
 
 export type PostBookmark = InferResultType<"postBookmarks">;
+
+export type PostReply = InferResultType<"postReplies">;
+
+export type PostReplyLike = InferResultType<"postReplyLikes">;
+
+export type PostReplyWithLikes = InferResultType<
+  "postReplies",
+  { postReplyLikes: true }
+>;

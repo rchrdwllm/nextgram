@@ -28,6 +28,9 @@ export const getReplyById = async (id: number) => {
   try {
     const reply = await db.query.postReplies.findFirst({
       where: eq(postReplies.id, id),
+      with: {
+        postReplyLikes: true,
+      },
     });
 
     if (!reply) {

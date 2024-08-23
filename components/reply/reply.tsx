@@ -1,11 +1,17 @@
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Heart } from "lucide-react";
-import { Toggle } from "../ui/toggle";
+import OptimisticLikeWrapper from "./optimistic-like-wrapper";
 import { getReplyById } from "@/lib/reply";
 import { getUserById } from "@/lib/user";
+import LikeReplyButton from "./like-reply-button";
+import ReplyLikesCount from "./reply-likes-count";
+import { getReplyLikeByIdAndUserId } from "@/lib/reply-like";
+import { auth } from "@/server/auth";
 
 const Reply = async ({ replyId }: { replyId: number }) => {
   const { success: reply, error: replyError } = await getReplyById(replyId);
+  const session = await auth();
+
+  if (!session) return null;
 
   if (replyError) return <div>Error: {replyError}</div>;
 
@@ -19,8 +25,11 @@ const Reply = async ({ replyId }: { replyId: number }) => {
 
   if (!replyUser) return <div>User not found</div>;
 
+  const likedReply = await getReplyLikeByIdAndUserId(replyId, session.user.id);
+  const isLiked = likedReply ? true : false;
+
   return (
-    <article className="flex gap-3 items-center">
+    <article className="flex gap-3 items-start">
       <div>
         {replyUser.image ? (
           <Avatar className="h-8 w-8">
@@ -41,25 +50,26 @@ const Reply = async ({ replyId }: { replyId: number }) => {
           </div>
         )}
       </div>
-      <div className="w-full">
-        <p className="text-sm font-medium">
-          {replyUser.name} <span className="font-normal">{reply.content}</span>
-        </p>
-        <div className="flex gap-2 items-center text-xs text-muted-foreground">
-          <p>
-            {reply.createdAt!.toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
+      <OptimisticLikeWrapper postReply={reply}>
+        <div className="w-full">
+          <p className="text-sm font-medium">
+            {replyUser.name}{" "}
+            <span className="font-normal">{reply.content}</span>
           </p>
-          <p>100 likes</p>
-          <p>Reply</p>
+          <div className="flex gap-2 items-center text-xs text-muted-foreground">
+            <p>
+              {reply.createdAt!.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+            <ReplyLikesCount />
+            <p>Reply</p>
+          </div>
         </div>
-      </div>
-      <Toggle>
-        <Heart className="h-4 w-4" />
-      </Toggle>
+        <LikeReplyButton isLiked={isLiked} replyId={reply.id} />
+      </OptimisticLikeWrapper>
     </article>
   );
 };
