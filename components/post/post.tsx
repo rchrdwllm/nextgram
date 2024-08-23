@@ -9,12 +9,14 @@ import { getPostById } from "@/lib/post";
 import { getUserById } from "@/lib/user";
 import Link from "next/link";
 import MoreActions from "./more-actions";
+import ReplyButton from "./reply-button";
+import Replies from "../reply/replies";
 
 type PostProps = {
   postId: string;
 };
 
-const Post = async ({ postId }: { postId: string }) => {
+const Post = async ({ postId }: PostProps) => {
   const session = await auth();
 
   if (!session) return null;
@@ -82,7 +84,11 @@ const Post = async ({ postId }: { postId: string }) => {
             post={post}
             isLiked={isLiked}
             isBookmarked={isBookmarked}
-          />
+          >
+            <ReplyButton postId={post.id}>
+              <Replies postId={post.id} />
+            </ReplyButton>
+          </PostActions>
           {post.caption && (
             <p className="text-muted-foreground text-sm">
               <span className="text-primary font-medium">{postUser.name}</span>{" "}

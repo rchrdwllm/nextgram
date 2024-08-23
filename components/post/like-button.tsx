@@ -1,5 +1,3 @@
-"use client";
-
 import { useAction } from "next-safe-action/hooks";
 import { Toggle } from "../ui/toggle";
 import { Heart } from "lucide-react";

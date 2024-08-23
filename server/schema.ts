@@ -118,12 +118,25 @@ export const follows = pgTable("follow", {
   createdAt: timestamp("createdAt").defaultNow(),
 });
 
+export const postReplies = pgTable("postReply", {
+  id: serial("id").primaryKey(),
+  content: text("content").notNull(),
+  createdAt: timestamp("createdAt").defaultNow(),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  postId: text("postId")
+    .notNull()
+    .references(() => posts.id, { onDelete: "cascade" }),
+});
+
 export const userRelations = relations(users, ({ many }) => ({
   posts: many(posts, { relationName: "posts" }),
   postLikes: many(postLikes, { relationName: "userPostLikes" }),
   postBookmarks: many(postBookmarks, { relationName: "userPostBookmarks" }),
   followers: many(follows, { relationName: "followers" }),
   followings: many(follows, { relationName: "followings" }),
+  postReplies: many(postReplies, { relationName: "userPostReplies" }),
 }));
 
 export const postRelations = relations(posts, ({ many, one }) => ({
@@ -135,6 +148,7 @@ export const postRelations = relations(posts, ({ many, one }) => ({
   postImages: many(postImages, { relationName: "postImages" }),
   postLikes: many(postLikes, { relationName: "postLikes" }),
   postBookmarks: many(postBookmarks, { relationName: "postBookmarks" }),
+  postReplies: many(postReplies, { relationName: "postReplies" }),
 }));
 
 export const postImagesRelations = relations(postImages, ({ one }) => ({
@@ -181,6 +195,19 @@ export const followsRelations = relations(follows, ({ one }) => ({
     fields: [follows.followingId],
     references: [users.id],
     relationName: "followings",
+  }),
+}));
+
+export const postRepliesRelations = relations(postReplies, ({ one }) => ({
+  user: one(users, {
+    fields: [postReplies.userId],
+    references: [users.id],
+    relationName: "userPostReplies",
+  }),
+  post: one(posts, {
+    fields: [postReplies.postId],
+    references: [posts.id],
+    relationName: "postReplies",
   }),
 }));
 
