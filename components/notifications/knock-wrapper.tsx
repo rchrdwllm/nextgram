@@ -88,6 +88,8 @@ const KnockWrapper = ({ children }: { children: ReactNode }) => {
               });
               break;
           }
+
+          router.refresh();
         }
       );
     }
