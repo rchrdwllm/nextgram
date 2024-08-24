@@ -65,6 +65,16 @@ const KnockWrapper = ({ children }: { children: ReactNode }) => {
                 },
               });
               break;
+            case "new-follow":
+              toast(`${actor.name} followed you`, {
+                action: {
+                  label: "Go to profile",
+                  onClick: () => {
+                    router.push(`/user/${data?.follower_id}`);
+                  },
+                },
+              });
+              break;
           }
         }
       );

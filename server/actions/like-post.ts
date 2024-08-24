@@ -56,12 +56,13 @@ export const likePost = actionClient
       }
 
       if (postAuthor.userId !== session.user.id) {
-        const notification = await knockClient.workflows.trigger("new-like", {
+        await knockClient.workflows.trigger("new-like", {
           recipients: [postAuthor.userId!],
           actor: session.user.id,
           data: {
             post_img_preview: postImagePreview.img,
             post_id: postId,
+            liker_image: session.user.image,
             post_user_id: postAuthor.userId,
           },
         });

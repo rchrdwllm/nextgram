@@ -7,6 +7,7 @@ import { and, eq } from "drizzle-orm";
 import { follows } from "../schema";
 import { auth } from "../auth";
 import { revalidatePath } from "next/cache";
+import { knockClient } from "../knock";
 
 export const follow = actionClient
   .schema(followSchema)
@@ -35,6 +36,16 @@ export const follow = actionClient
       await db.insert(follows).values({
         followerId,
         followingId,
+      });
+
+      await knockClient.workflows.trigger("new-follow", {
+        recipients: [followingId],
+        actor: session.user.id,
+        data: {
+          follower_id: session.user.id,
+          following_id: followingId,
+          follower_img: session.user.image,
+        },
       });
 
       return { success: "Followed user" };
