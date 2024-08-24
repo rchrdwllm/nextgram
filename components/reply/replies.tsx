@@ -1,5 +1,8 @@
 import { getPostReplyIdsByPostId } from "@/lib/reply";
 import Reply from "./reply";
+import { ScrollArea } from "../ui/scroll-area";
+import { Suspense } from "react";
+import ReplySkeleton from "./reply-skeleton";
 
 const Replies = async ({ postId }: { postId: string }) => {
   const { success: postReplyIds, error: postReplyIdsError } =
@@ -10,11 +13,13 @@ const Replies = async ({ postId }: { postId: string }) => {
   if (!postReplyIds) return <div>Post replies not found</div>;
 
   return (
-    <div className="flex flex-col gap-4">
+    <ScrollArea className="h-[300px]">
       {postReplyIds.map((replyId) => (
-        <Reply key={replyId} replyId={replyId} />
+        <Suspense fallback={<ReplySkeleton />}>
+          <Reply key={replyId} replyId={replyId} />
+        </Suspense>
       ))}
-    </div>
+    </ScrollArea>
   );
 };
 

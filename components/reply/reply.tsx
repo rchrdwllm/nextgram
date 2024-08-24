@@ -31,7 +31,7 @@ const Reply = async ({ replyId }: { replyId: number }) => {
   const isOwner = reply.userId === session.user.id;
 
   return (
-    <article className="flex gap-3 items-start">
+    <article className="mb-2 flex gap-3 items-start">
       <div>
         {replyUser.image ? (
           <Avatar className="h-8 w-8">
