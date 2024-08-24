@@ -6,6 +6,7 @@ import LikeReplyButton from "./like-reply-button";
 import ReplyLikesCount from "./reply-likes-count";
 import { getReplyLikeByIdAndUserId } from "@/lib/reply-like";
 import { auth } from "@/server/auth";
+import ReplyActions from "./reply-actions";
 
 const Reply = async ({ replyId }: { replyId: number }) => {
   const { success: reply, error: replyError } = await getReplyById(replyId);
@@ -27,6 +28,7 @@ const Reply = async ({ replyId }: { replyId: number }) => {
 
   const likedReply = await getReplyLikeByIdAndUserId(replyId, session.user.id);
   const isLiked = likedReply ? true : false;
+  const isOwner = reply.userId === session.user.id;
 
   return (
     <article className="flex gap-3 items-start">
@@ -66,6 +68,7 @@ const Reply = async ({ replyId }: { replyId: number }) => {
             </p>
             <ReplyLikesCount />
             <p>Reply</p>
+            {isOwner && <ReplyActions reply={reply} />}
           </div>
         </div>
         <LikeReplyButton isLiked={isLiked} replyId={reply.id} />

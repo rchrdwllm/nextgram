@@ -15,29 +15,33 @@ import * as z from "zod";
 import { Textarea } from "../ui/textarea";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
-import { reply } from "@/server/actions/reply";
+import { reply as replyAction } from "@/server/actions/reply";
 import { cn } from "@/lib/utils";
+import { PostReply } from "@/lib/infer-type";
+import { useEffect } from "react";
 
 type ReplyFormProps = {
-  postId: string;
+  postId?: string;
+  reply?: PostReply;
 };
 
-const ReplyForm = ({ postId }: ReplyFormProps) => {
+const ReplyForm = ({ postId, reply }: ReplyFormProps) => {
   const form = useForm<z.infer<typeof replySchema>>({
     resolver: zodResolver(replySchema),
     defaultValues: {
       content: "",
-      postId,
+      postId: postId ?? undefined,
+      replyId: reply?.id ?? undefined,
     },
   });
-  const { execute, status } = useAction(reply, {
+  const { execute, status } = useAction(replyAction, {
     onExecute: () => {
-      toast.loading("Creating reply...");
+      toast.loading(reply ? "Updating reply..." : "Creating reply...");
     },
     onSuccess: ({ data }) => {
       if (data?.success) {
         toast.dismiss();
-        toast.success("Reply created");
+        toast.success(data?.success);
         form.reset();
       }
 
@@ -47,6 +51,12 @@ const ReplyForm = ({ postId }: ReplyFormProps) => {
       }
     },
   });
+
+  useEffect(() => {
+    if (reply) {
+      form.setValue("content", reply.content ?? "");
+    }
+  }, [reply]);
 
   const handleSubmit = (values: z.infer<typeof replySchema>) => {
     execute(values);
@@ -76,7 +86,7 @@ const ReplyForm = ({ postId }: ReplyFormProps) => {
             status === "executing" ? "animate-pulse pointer-events-none" : ""
           )}
         >
-          Reply
+          {reply ? "Update reply" : "Reply"}
         </Button>
       </form>
     </Form>

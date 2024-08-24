@@ -33,6 +33,7 @@ const ReplyButton = ({ children, postId }: ReplyButtonProps) => {
           <DrawerHeader>
             <DrawerTitle>Replies</DrawerTitle>
           </DrawerHeader>
+          <DrawerDescription></DrawerDescription>
           <div className="p-4 flex flex-col gap-4">
             {children}
             <ReplyForm postId={postId} />
