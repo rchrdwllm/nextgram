@@ -15,8 +15,8 @@ const Replies = async ({ postId }: { postId: string }) => {
   return (
     <ScrollArea className="h-[300px]">
       {postReplyIds.map((replyId) => (
-        <Suspense fallback={<ReplySkeleton />}>
-          <Reply key={replyId} replyId={replyId} />
+        <Suspense key={replyId} fallback={<ReplySkeleton />}>
+          <Reply replyId={replyId} />
         </Suspense>
       ))}
     </ScrollArea>

@@ -8,6 +8,7 @@ import { eq } from "drizzle-orm";
 import { accounts, twoFactorTokens, users } from "./schema";
 import { loginSchema } from "@/form_schemas/login-schema";
 import bcrypt from "bcrypt";
+import { knockClient } from "./knock";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: DrizzleAdapter(db),
@@ -32,7 +33,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       authorize: async (credentials) => {
         const validatedFields = loginSchema.safeParse(credentials);
 
-        console.log(validatedFields.data);
         if (validatedFields.success) {
           const { email, password, code } = validatedFields.data;
 
@@ -44,8 +44,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             const token = await db.query.twoFactorTokens.findFirst({
               where: eq(twoFactorTokens.token, code),
             });
-
-            console.log(code);
 
             if (!token) return null;
 
@@ -126,12 +124,34 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             where: eq(accounts.providerAccountId, account.providerAccountId),
           });
 
+          if (existingUser) {
+            await knockClient.users.identify(existingUser.id, {
+              name: existingUser.name ?? undefined,
+              email: existingUser.email,
+            });
+          }
+
           if (existingUser && !existingAccount) {
             throw new Error(
               `You used a Google account to sign in. However, a Nextgram account already exists for ${profile.email}. Please sign in with email and password instead.`
             );
           }
+
+          return true;
         }
+      }
+
+      if (account) {
+        const existingUser = await db.query.users.findFirst({
+          where: eq(users.id, account.providerAccountId),
+        });
+
+        if (!existingUser) throw new Error("User not found");
+
+        await knockClient.users.identify(existingUser.id, {
+          name: existingUser.name ?? undefined,
+          email: existingUser.email,
+        });
       }
 
       return true;

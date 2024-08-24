@@ -6,6 +6,7 @@ import ThemeProvider from "@/components/ui/theme-provider";
 import TopLoader from "@/components/ui/top-loader";
 import { SessionProvider } from "next-auth/react";
 import { cn } from "@/lib/utils";
+import KnockWrapper from "@/components/notifications/knock-wrapper";
 
 export const metadata: Metadata = {
   title: "Nextgram",
@@ -27,7 +28,7 @@ export default function RootLayout({
               className={cn(GeistSans.className, "bg-primary")}
               richColors
             />
-            {children}
+            <KnockWrapper>{children}</KnockWrapper>
           </ThemeProvider>
         </SessionProvider>
       </body>
