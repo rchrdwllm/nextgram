@@ -75,6 +75,18 @@ const KnockWrapper = ({ children }: { children: ReactNode }) => {
                 },
               });
               break;
+            case "new-reply":
+              toast(`${actor.name} replied to your post: ${data?.content}`, {
+                action: {
+                  label: "Go to post",
+                  onClick: () => {
+                    router.push(
+                      `/posts?userId=${session?.user.id}#${data?.post_id}`
+                    );
+                  },
+                },
+              });
+              break;
           }
         }
       );

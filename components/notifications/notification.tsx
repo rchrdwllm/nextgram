@@ -9,31 +9,24 @@ const Notification = ({ notification }: { notification: FeedItem }) => {
   const { updated_at } = notification;
   const actor = notification.actors[0] as any;
   const { key } = notification.source;
+  const { data } = notification;
 
   switch (key) {
     case "new-like":
-      const { post_id, post_img_preview, post_user_id, liker_image } =
-        notification.data as {
-          post_id: string;
-          post_img_preview: string;
-          post_user_id: string;
-          liker_image: string;
-        };
-
       return (
         <Link
-          href={`/posts?userId=${post_user_id}#${post_id}`}
+          href={`/posts?userId=${data.post_user_id}#${data.post_id}`}
           className="flex gap-4 items-center rounded-md p-2 transition-colors hover:bg-secondary/50"
         >
           <div className="relative w-8 h-8">
             <Image
-              src={liker_image ?? ""}
+              src={data.liker_image ?? ""}
               alt="post preview"
               className="object-cover w-8 h-8 rounded-sm"
               fill
             />
           </div>
-          <div>
+          <div className="flex-1">
             <p className="text-sm">
               <span className="font-medium">{actor.name}</span> liked your post
             </p>
@@ -46,7 +39,7 @@ const Notification = ({ notification }: { notification: FeedItem }) => {
           </div>
           <div className="relative w-8 h-8">
             <Image
-              src={post_img_preview ?? ""}
+              src={data.post_img_preview ?? ""}
               alt="post preview"
               className="object-cover w-8 h-8 rounded-sm"
               fill
@@ -55,27 +48,22 @@ const Notification = ({ notification }: { notification: FeedItem }) => {
         </Link>
       );
     case "new-follow":
-      const { follower_id, follower_img } = notification.data as {
-        follower_id: string;
-        follower_img: string;
-      };
-
       return (
         <Link
-          href={`/user/${follower_id}`}
+          href={`/user/${data.follower_id}`}
           className="flex gap-3 items-center rounded-md p-2 transition-colors hover:bg-secondary/50"
         >
-          {follower_img && (
+          {data.follower_img && (
             <div className="relative w-8 h-8">
               <Image
-                src={follower_img ?? ""}
+                src={data.follower_img ?? ""}
                 alt="follower preview"
                 className="object-cover w-8 h-8 rounded-sm"
                 fill
               />
             </div>
           )}
-          <div>
+          <div className="flex-1">
             <p className="text-sm">
               <span className="font-medium">{actor.name}</span> followed you
             </p>
@@ -85,6 +73,42 @@ const Notification = ({ notification }: { notification: FeedItem }) => {
                 minute: "numeric",
               })}
             </p>
+          </div>
+        </Link>
+      );
+    case "new-reply":
+      return (
+        <Link
+          href={`/posts?userId=${data.replier_id}#${data.post_id}`}
+          className="flex gap-4 items-center rounded-md p-2 transition-colors hover:bg-secondary/50"
+        >
+          <div className="relative w-8 h-8">
+            <Image
+              src={data.replier_img ?? ""}
+              alt="post preview"
+              className="object-cover w-8 h-8 rounded-sm"
+              fill
+            />
+          </div>
+          <div className="flex-1">
+            <p className="text-sm">
+              <span className="font-medium">{actor.name}</span> replied to your
+              post: {data.content}
+            </p>
+            <p className="text-sm text-muted-foreground">
+              {new Date(updated_at).toLocaleDateString("en-US", {
+                hour: "numeric",
+                minute: "numeric",
+              })}
+            </p>
+          </div>
+          <div className="relative w-8 h-8">
+            <Image
+              src={data.post_img_preview ?? ""}
+              alt="post preview"
+              className="object-cover w-8 h-8 rounded-sm"
+              fill
+            />
           </div>
         </Link>
       );
