@@ -7,6 +7,7 @@ import ReplyLikesCount from "./reply-likes-count";
 import { getReplyLikeByIdAndUserId } from "@/lib/reply-like";
 import { auth } from "@/server/auth";
 import ReplyActions from "./reply-actions";
+import Link from "next/link";
 
 const Reply = async ({ replyId }: { replyId: number }) => {
   const { success: reply, error: replyError } = await getReplyById(replyId);
@@ -32,7 +33,7 @@ const Reply = async ({ replyId }: { replyId: number }) => {
 
   return (
     <article className="mb-2 flex gap-3 items-start">
-      <div>
+      <Link href={`/user/${reply.userId}`}>
         {replyUser.image ? (
           <Avatar className="h-8 w-8">
             <AvatarImage src={replyUser.image} className="object-cover" />
@@ -51,11 +52,11 @@ const Reply = async ({ replyId }: { replyId: number }) => {
             </p>
           </div>
         )}
-      </div>
+      </Link>
       <OptimisticLikeWrapper postReply={reply}>
         <div className="w-full">
           <p className="text-sm font-medium">
-            {replyUser.name}{" "}
+            <Link href={`/user/${reply.userId}`}>{replyUser.name} </Link>
             <span className="font-normal">{reply.content}</span>
           </p>
           <div className="flex gap-2 items-center text-xs text-muted-foreground">
