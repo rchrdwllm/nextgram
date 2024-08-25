@@ -1,10 +1,38 @@
-const LikeCount = ({ postLikes }: { postLikes: number }) => {
-  if (postLikes === 0) return null;
+import { PostLike } from "@/lib/infer-type";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import ProfileCard from "../user/profile-card";
+import { ReactNode } from "react";
+
+type LikeCountProps = {
+  postLikeCount: number;
+  profileCards: ReactNode;
+};
+
+const LikeCount = ({ postLikeCount, profileCards }: LikeCountProps) => {
+  if (postLikeCount === 0) return null;
 
   return (
-    <p className="text-sm font-medium">
-      {postLikes} {postLikes === 1 ? "like" : "likes"}
-    </p>
+    <Dialog>
+      <DialogTrigger asChild>
+        <p className="text-sm font-medium cursor-pointer">
+          {postLikeCount} {postLikeCount === 1 ? "like" : "likes"}
+        </p>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Likes</DialogTitle>
+          <DialogDescription></DialogDescription>
+        </DialogHeader>
+        <div className="flex flex-col gap-4">{profileCards}</div>
+      </DialogContent>
+    </Dialog>
   );
 };
 

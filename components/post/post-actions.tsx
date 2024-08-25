@@ -12,6 +12,7 @@ type PostActionsProps = {
   isLiked: boolean;
   isBookmarked: boolean;
   children: ReactNode;
+  profileCards: ReactNode;
 };
 
 const PostActions = ({
@@ -19,6 +20,7 @@ const PostActions = ({
   isLiked,
   isBookmarked,
   children,
+  profileCards,
 }: PostActionsProps) => {
   const [optimisticLikeCount, setOptimisticLikeCount] = useOptimistic(
     post.postLikes.length,
@@ -45,7 +47,10 @@ const PostActions = ({
         </div>
         <BookmarkButton isBookmarked={isBookmarked} postId={post.id} />
       </div>
-      <LikeCount postLikes={optimisticLikeCount} />
+      <LikeCount
+        profileCards={profileCards}
+        postLikeCount={optimisticLikeCount}
+      />
     </>
   );
 };

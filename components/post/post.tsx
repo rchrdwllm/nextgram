@@ -11,6 +11,7 @@ import Link from "next/link";
 import MoreActions from "./more-actions";
 import ReplyButton from "./reply-button";
 import Replies from "../reply/replies";
+import ProfileCard from "../user/profile-card";
 
 type PostProps = {
   postId: string;
@@ -84,6 +85,9 @@ const Post = async ({ postId }: PostProps) => {
             post={post}
             isLiked={isLiked}
             isBookmarked={isBookmarked}
+            profileCards={post.postLikes.map((postLike) => (
+              <ProfileCard userId={postLike.userId} key={postLike.id} />
+            ))}
           >
             <ReplyButton postId={post.id}>
               <Replies postId={post.id} />
