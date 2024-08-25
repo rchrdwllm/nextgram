@@ -6,7 +6,7 @@ const ReplySkeleton = () => {
       <div>
         <Skeleton className="h-8 w-8 rounded-full" />
       </div>
-      <div className="w-full">
+      <div className="w-full flex flex-col gap-3">
         <div className="flex gap-2">
           <Skeleton className="h-4 w-8" />
           <Skeleton className="h-4 w-full" />
