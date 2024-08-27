@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import FadeWrapper from "@/components/ui/fade-wrapper";
 
 const SettingsPage = async () => {
   const session = await auth();
@@ -14,17 +15,19 @@ const SettingsPage = async () => {
   if (!session) return null;
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Profile</CardTitle>
-        <CardDescription>
-          This is how others will see you on the website
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <SettingsForm session={session} />
-      </CardContent>
-    </Card>
+    <FadeWrapper>
+      <Card>
+        <CardHeader>
+          <CardTitle>Profile</CardTitle>
+          <CardDescription>
+            This is how others will see you on the website
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <SettingsForm session={session} />
+        </CardContent>
+      </Card>
+    </FadeWrapper>
   );
 };
 
