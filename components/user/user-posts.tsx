@@ -1,4 +1,3 @@
-import { Post } from "@/lib/infer-type";
 import PostsGrid from "../post/posts-grid";
 import PostPreview from "../post/post-preview";
 
