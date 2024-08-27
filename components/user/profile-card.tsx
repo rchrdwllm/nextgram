@@ -33,8 +33,8 @@ const ProfileCard = async ({ userId }: { userId: string }) => {
   const isFollowing = userFollowerIds.includes(session?.user.id!);
 
   return (
-    <div className="flex justify-between items-center">
-      <Link href={`/user/${userId}`} className="flex items-center gap-2">
+    <div className="flex p-2 justify-between items-center rounded-md transition-colors hover:bg-secondary">
+      <Link href={`/user/${userId}`} className="w-full flex items-center gap-2">
         {user.image ? (
           <Avatar className="h-12 w-12">
             <AvatarImage src={user.image} className="object-cover" />

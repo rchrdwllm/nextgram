@@ -7,7 +7,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import ProfileCard from "../user/profile-card";
 import { ReactNode } from "react";
 
 type LikeCountProps = {
@@ -30,7 +29,7 @@ const LikeCount = ({ postLikeCount, profileCards }: LikeCountProps) => {
           <DialogTitle>Likes</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-        <div className="flex flex-col gap-4">{profileCards}</div>
+        <div className="flex flex-col gap-1">{profileCards}</div>
       </DialogContent>
     </Dialog>
   );

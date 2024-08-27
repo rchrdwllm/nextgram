@@ -1,7 +1,7 @@
 import { db } from "@/server";
 import { auth } from "@/server/auth";
-import { lower, users } from "@/server/schema";
-import { eq, like, not, or } from "drizzle-orm";
+import { follows, lower, users } from "@/server/schema";
+import { and, eq, inArray, like, not, or } from "drizzle-orm";
 
 export const getUserById = async (userId: string) => {
   try {
@@ -64,6 +64,39 @@ export const getUsersByLimit = async (limit: number) => {
     const userIds = usersResult.map((user) => user.userId);
 
     return { success: userIds };
+  } catch (error) {
+    return { error: "Failed to get users" };
+  }
+};
+
+export const getNotFollowingUsers = async () => {
+  const session = await auth();
+
+  if (!session) return { error: "You must be logged in to view this page" };
+
+  const userId = session.user.id;
+
+  try {
+    const userFollowing = await db.query.follows.findMany({
+      where: eq(follows.followerId, userId),
+    });
+
+    if (!userFollowing) {
+      return { error: "Failed to fetch users" };
+    }
+
+    const userFollowingIds = userFollowing.map((user) => user.followingId);
+
+    const userIds = await db
+      .select({
+        userId: users.id,
+      })
+      .from(users)
+      .where(
+        and(not(inArray(users.id, userFollowingIds)), not(eq(users.id, userId)))
+      );
+
+    return { success: userIds.map((user) => user.userId) };
   } catch (error) {
     return { error: "Failed to get users" };
   }
