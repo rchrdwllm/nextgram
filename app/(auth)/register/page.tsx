@@ -11,7 +11,7 @@ import RegisterForm from "@/components/auth/register-form";
 
 const RegisterPage = () => {
   return (
-    <Card>
+    <Card className="lg:p-8">
       <CardHeader>
         <CardTitle>Welcome to Nextgram!</CardTitle>
         <CardDescription>

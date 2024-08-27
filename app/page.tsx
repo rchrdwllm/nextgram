@@ -9,11 +9,13 @@ const HomePage = async () => {
   if (session) return redirect("/feed");
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center gap-4">
-      <h1 className="font-bold text-3xl">Welcome to Nextgram!</h1>
-      <p className="text-muted-foreground text-center">
+    <div className="h-screen flex flex-col justify-center items-center gap-4 p-4">
+      <h1 className="font-bold text-3xl sm:text-5xl lg:text-6xl">
+        Welcome to Nextgram!
+      </h1>
+      <p className="text-muted-foreground text-center md:w-3/4 lg:w-1/2">
         An attempt to clone Instagram's basic functionalities using Next.js,
-        TypeScript, Framer Motion, Zustand, Drizzle, and NeonDB.
+        TypeScript, Framer Motion, Drizzle, and NeonDB.
       </p>
       <div className="w-64 flex gap-4">
         <Link className="w-full" href="/register">

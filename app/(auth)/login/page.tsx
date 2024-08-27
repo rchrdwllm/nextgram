@@ -11,7 +11,7 @@ import LoginForm from "@/components/auth/login-form";
 
 const LoginPage = () => {
   return (
-    <Card>
+    <Card className="lg:p-8">
       <CardHeader>
         <CardTitle>Welcome back!</CardTitle>
         <CardDescription>
