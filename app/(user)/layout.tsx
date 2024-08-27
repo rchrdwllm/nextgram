@@ -11,11 +11,11 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
   if (!session) return redirect("/");
 
   return (
-    <main className="min-h-screen md:flex">
+    <main className="relative h-screen md:flex md:overflow-y-auto">
       <DesktopNav />
       <div className="w-full">
         <Nav />
-        <div className="min-h-[90vh] px-4 py-8 overflow-y-auto h-screen md:px-12 lg:px-36">
+        <div className="min-h-[90vh] px-4 py-8 md:px-12 lg:px-36">
           {children}
         </div>
       </div>

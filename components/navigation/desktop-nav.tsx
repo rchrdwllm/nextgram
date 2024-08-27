@@ -13,7 +13,7 @@ const DesktopNav = () => {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden md:flex flex-col border-r min-h-full px-4 py-8 min-w-[250px]">
+    <aside className="sticky top-0 hidden md:flex flex-col border-r min-h-full px-4 py-8 min-w-[250px]">
       <h1 className="text-xl font-bold">Nextgram</h1>
       <div className="flex flex-col gap-1 mt-8">
         {navLinks.map((link) => (
