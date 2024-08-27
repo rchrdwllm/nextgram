@@ -14,7 +14,7 @@ const DesktopSuggestions = async () => {
   }
 
   return (
-    <div className="border-l min-h-screen min-w-[400px] px-4 py-8 flex flex-col gap-4">
+    <div className="hidden border-l min-h-screen min-w-[400px] px-4 py-8 md:flex flex-col gap-4">
       <h1 className="text-xl font-bold">Suggested</h1>
       {users.map((userId) => (
         <ProfileCard key={userId} userId={userId} />
