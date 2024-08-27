@@ -10,6 +10,7 @@ import {
   users,
 } from "../schema";
 import bcrypt from "bcrypt";
+import { knockClient } from "../knock";
 
 export const generateEmailVerificationToken = async (email: string) => {
   const token = crypto.randomUUID();
@@ -47,13 +48,21 @@ export const verifyEmail = async (token: string) => {
     return { error: "Token expired" };
   }
 
-  await db.update(users).set({
-    emailVerified: new Date(),
-  });
+  const [user] = await db
+    .update(users)
+    .set({
+      emailVerified: new Date(),
+    })
+    .returning();
 
   await db
     .delete(emailVerificationTokens)
     .where(eq(emailVerificationTokens.token, token));
+
+  await knockClient.users.identify(user.id, {
+    name: user.name ?? "",
+    email: user.email,
+  });
 
   return { success: "Email successfully verified" };
 };

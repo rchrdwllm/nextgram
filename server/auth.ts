@@ -113,7 +113,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return session;
     },
-    signIn: async ({ account, profile }) => {
+    signIn: async ({ account, profile, user }) => {
       if (account && profile) {
         if (account.provider === "google") {
           const existingUser = await db.query.users.findFirst({
@@ -124,10 +124,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             where: eq(accounts.providerAccountId, account.providerAccountId),
           });
 
-          if (existingUser) {
-            await knockClient.users.identify(existingUser.id, {
-              name: existingUser.name ?? undefined,
-              email: existingUser.email,
+          if (!existingUser) {
+            await knockClient.users.identify(user.id!, {
+              name: user.name ?? undefined,
+              email: user.email!,
             });
           }
 
@@ -147,11 +147,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         });
 
         if (!existingUser) throw new Error("User not found");
-
-        await knockClient.users.identify(existingUser.id, {
-          name: existingUser.name ?? undefined,
-          email: existingUser.email,
-        });
       }
 
       return true;
