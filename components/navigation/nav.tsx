@@ -6,7 +6,7 @@ const Nav = async () => {
   const session = await auth();
 
   return (
-    <nav className="sticky top-0 z-10 bg-card flex p-4 border-b justify-between items-center">
+    <nav className="sticky top-0 z-10 bg-card flex p-4 border-b justify-between items-center md:hidden">
       <Link href="/feed">
         <h1 className="text-xl font-bold">Nextgram</h1>
       </Link>
