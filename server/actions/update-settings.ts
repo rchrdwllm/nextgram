@@ -7,6 +7,7 @@ import { settingsSchema } from "@/form_schemas/settings-schema";
 import { accounts, users } from "../schema";
 import bcrypt from "bcrypt";
 import { revalidatePath } from "next/cache";
+import { knockClient } from "../knock";
 
 export const updateSettings = actionClient
   .schema(settingsSchema)
@@ -86,6 +87,13 @@ export const updateSettings = actionClient
           ...parsedInput,
         })
         .where(eq(users.id, parsedInput.id));
+
+      await knockClient.users.delete(parsedInput.id);
+
+      await knockClient.users.identify(parsedInput.id, {
+        name: parsedInput.name ?? "",
+        email: parsedInput.email,
+      });
 
       return { success: "User settings updated" };
     } catch (error) {

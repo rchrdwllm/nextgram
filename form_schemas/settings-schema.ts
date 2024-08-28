@@ -18,16 +18,8 @@ export const settingsSchema = z.object({
     })
   ),
   bio: z.optional(z.string()),
-  currentPassword: z.optional(
-    z.string().min(8, {
-      message: "Enter at least 8 characters",
-    })
-  ),
-  newPassword: z.optional(
-    z.string().min(8, {
-      message: "Enter at least 8 characters",
-    })
-  ),
+  currentPassword: z.optional(z.string()),
+  newPassword: z.optional(z.string()),
   image: z.optional(z.string()),
   twoFactorEnabled: z.optional(z.boolean()),
 });
