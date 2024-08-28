@@ -8,6 +8,7 @@ import { Button } from "../ui/button";
 import { Fragment } from "react";
 import { usePathname } from "next/navigation";
 import DesktopUserButton from "./desktop-user-button";
+import NotifLink from "./notif-link";
 
 const DesktopNav = () => {
   const pathname = usePathname();
@@ -19,33 +20,37 @@ const DesktopNav = () => {
         {desktopNavLinks.map((link) => (
           <Fragment key={link.href}>
             {link.href ? (
-              <Link href={link.href}>
-                <Button
-                  className={cn(
-                    "flex items-center gap-4 w-full justify-start text-left transition-colors",
-                    pathname === link.href ? "bg-secondary" : ""
-                  )}
-                  variant="ghost"
-                >
-                  <link.Icon
+              link.href === "/notifications" ? (
+                <NotifLink />
+              ) : (
+                <Link href={link.href}>
+                  <Button
                     className={cn(
-                      "h-4 w-4",
-                      pathname === link.href
-                        ? "text-primary"
-                        : "text-muted-foreground"
+                      "flex items-center gap-4 w-full justify-start text-left transition-colors",
+                      pathname === link.href ? "bg-secondary" : ""
                     )}
-                  />
-                  <span
-                    className={
-                      pathname === link.href
-                        ? "font-bold text-primary"
-                        : "text-muted-foreground"
-                    }
+                    variant="ghost"
                   >
-                    {link.label.charAt(0).toUpperCase() + link.label.slice(1)}
-                  </span>
-                </Button>
-              </Link>
+                    <link.Icon
+                      className={cn(
+                        "h-4 w-4",
+                        pathname === link.href
+                          ? "text-primary"
+                          : "text-muted-foreground"
+                      )}
+                    />
+                    <span
+                      className={
+                        pathname === link.href
+                          ? "font-bold text-primary"
+                          : "text-muted-foreground"
+                      }
+                    >
+                      {link.label.charAt(0).toUpperCase() + link.label.slice(1)}
+                    </span>
+                  </Button>
+                </Link>
+              )
             ) : (
               <CreateFormButton asLink />
             )}

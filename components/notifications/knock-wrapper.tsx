@@ -1,6 +1,7 @@
 "use client";
 
 import { knockClient } from "@/lib/knock";
+import { useNotifStore } from "@/zustand/notif-store";
 import { Feed, FeedItem } from "@knocklabs/client";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -22,6 +23,7 @@ const KnockWrapper = ({ children }: { children: ReactNode }) => {
   const { data: session } = useSession();
   const [knockFeed, setKnockFeed] = useState<Feed>();
   const router = useRouter();
+  const { addNotification } = useNotifStore();
 
   const fetchFeed = async () => {
     if (knockFeed) {
@@ -88,6 +90,8 @@ const KnockWrapper = ({ children }: { children: ReactNode }) => {
               });
               break;
           }
+
+          addNotification();
 
           router.refresh();
         }

@@ -21,7 +21,7 @@ const Likes = async () => {
   }
 
   return (
-    <Card className="border-0 p-0 flex flex-col gap-4">
+    <Card className="border-0 p-0 flex flex-col gap-4 shadow-none">
       <CardHeader className="p-0">
         <CardTitle>Your likes</CardTitle>
         <CardDescription>You have {likes.length} likes</CardDescription>

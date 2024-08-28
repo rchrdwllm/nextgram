@@ -14,6 +14,7 @@ import { KnockContext } from "./knock-wrapper";
 import { knockClient } from "@/lib/knock";
 import Notification from "./notification";
 import NotificationSkeleton from "./notification-skeleton";
+import { useNotifStore } from "@/zustand/notif-store";
 
 const Notifications = () => {
   const { data: session } = useSession();
@@ -21,6 +22,7 @@ const Notifications = () => {
   const [feed, setFeed] = useState<FeedStoreState>();
   const items = useMemo(() => feed?.items ?? [], [feed]);
   const [isLoading, setIsLoading] = useState(true);
+  const { setNotifications } = useNotifStore();
 
   const fetchFeed = async () => {
     if (knockFeed) {
@@ -58,13 +60,18 @@ const Notifications = () => {
     }
   }, [knockFeed]);
 
+  useEffect(() => {
+    setNotifications(0);
+  }, []);
+
   return (
-    <Card className="border-0 p-0 flex flex-col gap-4">
+    <Card className="border-0 p-0 flex flex-col gap-4 shadow-none">
       <CardHeader className="p-0">
         <CardTitle>Your notifications</CardTitle>
         <CardDescription>You have {items.length} notifications</CardDescription>
       </CardHeader>
       <CardContent className="p-0 flex flex-col gap-1">
+        <h1 className="font-bold">Today</h1>
         {isLoading ? (
           <>
             <NotificationSkeleton />
