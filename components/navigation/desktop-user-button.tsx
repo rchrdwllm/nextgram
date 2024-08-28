@@ -15,9 +15,11 @@ import { signOut } from "next-auth/react";
 import { toast } from "sonner";
 import ThemeToggler from "./theme-toggler";
 import Link from "next/link";
+import { useMediaQuery } from "usehooks-ts";
 
 const DesktopUserButton = () => {
   const { data: session } = useSession();
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   if (!session) return null;
 
@@ -50,7 +52,7 @@ const DesktopUserButton = () => {
                 </div>
               </AvatarFallback>
             </Avatar>
-            <span className="text-muted-foreground font-normal overflow-hidden text-ellipsis whitespace-nowrap">
+            <span className="font-normal overflow-hidden text-ellipsis whitespace-nowrap">
               {session.user.name}
             </span>
           </Button>
@@ -84,24 +86,28 @@ const DesktopUserButton = () => {
             <span>Profile</span>
           </DropdownMenuItem>
         </Link>
-        <Link href="/likes">
-          <DropdownMenuItem className="flex gap-2 cursor-pointer">
-            <Heart className="w-4 h-4" />
-            <span>Likes</span>
-          </DropdownMenuItem>
-        </Link>
-        <Link href="/saved">
-          <DropdownMenuItem className="flex gap-2 cursor-pointer">
-            <Bookmark className="w-4 h-4" />
-            <span>Saved</span>
-          </DropdownMenuItem>
-        </Link>
-        <Link href="/settings">
-          <DropdownMenuItem className="flex gap-2 cursor-pointer">
-            <Settings className="w-4 h-4" />
-            <span>Settings</span>
-          </DropdownMenuItem>
-        </Link>
+        {!isDesktop && (
+          <>
+            <Link href="/likes">
+              <DropdownMenuItem className="flex gap-2 cursor-pointer">
+                <Heart className="w-4 h-4" />
+                <span>Likes</span>
+              </DropdownMenuItem>
+            </Link>
+            <Link href="/saved">
+              <DropdownMenuItem className="flex gap-2 cursor-pointer">
+                <Bookmark className="w-4 h-4" />
+                <span>Saved</span>
+              </DropdownMenuItem>
+            </Link>
+            <Link href="/settings">
+              <DropdownMenuItem className="flex gap-2 cursor-pointer">
+                <Settings className="w-4 h-4" />
+                <span>Settings</span>
+              </DropdownMenuItem>
+            </Link>
+          </>
+        )}
         <DropdownMenuItem className="cursor-pointer">
           <ThemeToggler />
         </DropdownMenuItem>

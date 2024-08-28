@@ -85,6 +85,7 @@ const ReplyForm = ({ postId, reply }: ReplyFormProps) => {
             "w-full",
             status === "executing" ? "animate-pulse pointer-events-none" : ""
           )}
+          disabled={!form.getValues("content")}
         >
           {reply ? "Update reply" : "Reply"}
         </Button>

@@ -1,6 +1,6 @@
 "use client";
 
-import { navLinks } from "@/constants/nav-links";
+import { desktopNavLinks } from "@/constants/nav-links";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import CreateFormButton from "../create/create-form-button";
@@ -16,7 +16,7 @@ const DesktopNav = () => {
     <aside className="sticky top-0 hidden md:flex flex-col border-r min-h-full px-4 py-8 min-w-[250px]">
       <h1 className="text-xl font-bold">Nextgram</h1>
       <div className="flex flex-col gap-1 mt-8">
-        {navLinks.map((link) => (
+        {desktopNavLinks.map((link) => (
           <Fragment key={link.href}>
             {link.href ? (
               <Link href={link.href}>

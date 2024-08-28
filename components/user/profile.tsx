@@ -91,7 +91,7 @@ const Profile = async ({ userId }: { userId: string }) => {
   const isFollowing = userFollowerIds.includes(session?.user.id!);
 
   return (
-    <div>
+    <div className="md:pt-12">
       <header className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
           {user.image ? (

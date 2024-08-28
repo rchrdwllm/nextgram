@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const ProfileLoading = () => {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 md:pt-12">
       <div className="flex items-center justify-between">
         <Skeleton className="w-24 h-24 rounded-full" />
         <div className="flex flex-col gap-2 items-center justify-center">
