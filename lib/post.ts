@@ -111,42 +111,46 @@ export const getPostIdsByUserBookmark = async (userId: string) => {
   }
 };
 
-export const getPostsByFollowing = async (userId: string) => {
-  try {
-    const userFollowingIds = await db
-      .select({
-        followingId: follows.followingId,
-      })
-      .from(follows)
-      .where(eq(follows.followerId, userId));
+export const getPostsByFollowing = unstable_cache(
+  async (userId: string) => {
+    try {
+      const userFollowingIds = await db
+        .select({
+          followingId: follows.followingId,
+        })
+        .from(follows)
+        .where(eq(follows.followerId, userId));
 
-    if (!userFollowingIds) {
-      return { error: "Failed to fetch user following IDs" };
+      if (!userFollowingIds) {
+        return { error: "Failed to fetch user following IDs" };
+      }
+
+      const userFollowingIdsArray = userFollowingIds.map(
+        (userFollowingId) => userFollowingId.followingId
+      );
+
+      const postIdsResult = await db
+        .select({
+          postId: posts.id,
+        })
+        .from(posts)
+        .where(inArray(posts.userId, [...userFollowingIdsArray, userId]))
+        .orderBy(desc(posts.createdAt));
+
+      if (!postIdsResult) {
+        return { error: "Failed to fetch post IDs" };
+      }
+
+      const postIds = postIdsResult.map((postId) => postId.postId);
+
+      return { success: postIds };
+    } catch (error) {
+      return { error: "Failed to get posts" };
     }
-
-    const userFollowingIdsArray = userFollowingIds.map(
-      (userFollowingId) => userFollowingId.followingId
-    );
-
-    const postIdsResult = await db
-      .select({
-        postId: posts.id,
-      })
-      .from(posts)
-      .where(inArray(posts.userId, [...userFollowingIdsArray, userId]))
-      .orderBy(desc(posts.createdAt));
-
-    if (!postIdsResult) {
-      return { error: "Failed to fetch post IDs" };
-    }
-
-    const postIds = postIdsResult.map((postId) => postId.postId);
-
-    return { success: postIds };
-  } catch (error) {
-    return { error: "Failed to get posts" };
-  }
-};
+  },
+  ["posts"],
+  { revalidate: 3600, tags: ["posts"] }
+);
 
 export const getPostsByQuery = async (q: string) => {
   try {
