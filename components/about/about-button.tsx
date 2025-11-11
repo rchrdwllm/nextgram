@@ -28,9 +28,7 @@ const AboutButton = () => {
         <div className="flex flex-col gap-2 text-muted-foreground">
           <p>
             Hello! This is an Instagram clone project, built with Next.js,
-            TypeScript, Framer Motion, Drizzle, and NeonDB. While most of the
-            functionalities I wanted to implement are done, the project still in
-            the works. If you have any suggestions or feedback, please feel free
+            TypeScript, Framer Motion, Drizzle, and NeonDB. If you have any suggestions or feedback, please feel free
             to reach out to me on{" "}
             <Link
               href="https://www.x.com/imrchrdwllm"
