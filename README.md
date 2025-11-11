@@ -1,6 +1,6 @@
-# Nextgram - Instagram Clone (WIP)
+# Nextgram - Instagram Clone
 
-This is a WIP [Next.js](https://nextjs.org/) project that I'm working on to learn Next.js and TypeScript. It's a clone of Instagram, with its basic functionalities.
+This is a [Next.js](https://nextjs.org/) project that I'm working on to learn Next.js and TypeScript. It's a clone of Instagram, with its basic functionalities.
 
 There are still a lot of missing stuff that I want to work on. For now, this only looks best on screens small screens as I prioritized working on the mobile experience first.
 
